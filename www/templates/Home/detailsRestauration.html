@@ -122,9 +122,11 @@
           <option ng-show="billet.code === 'sn' " value="Wari">Wari</option>
           <option ng-show="billet.code === 'ci' " value="Flooz">Flooz</option>
           <option ng-show="billet.code === 'ci' " value="MTN">MTN</option>
-          <option value="Visa">Visa</option>
-          <option value="Mastercard">Mastercard</option>
-          <!-- <option value="Paypal">PayPal</option> -->
+          <!-- 
+            <option value="Visa">Visa</option>
+            <option value="Mastercard">Mastercard</option>
+            <option value="Paypal">PayPal</option>
+           -->
         </select>
       </label>
       
@@ -348,7 +350,10 @@
 <script id="detailAchat.html" type="text/ng-template">
   <ion-modal-view>
     <ion-header-bar>
-      <h1 class="title">Détail Achat</h1>
+      <button style="margin-top: 1%" ng-click="closeModalDetailAchat()" class="button">
+        <i class="icon ion-arrow-left-a"></i> Retour
+      </button>          
+      <span class="title" style="font-size: 1.1em">Nom ticket - Détails achat</span>
     </ion-header-bar>
     <ion-content style="margin-left: -2%; margin-right: -8%">
       <div class="row" style="padding-bottom: 0;">
@@ -385,23 +390,23 @@
       </div>
 
       <div class="row" style="padding-bottom: 0;">
-          <div class="col" style="padding-bottom: 0;">
-            <div class="row"  style="padding-bottom: 0; color: #3c763d; height: 50px">
-              <div style="border-style: solid none solid solid;" class="col-33 tabColHeadBottom tabCol">Total HT</div>
-              <div style="border-style: solid none solid solid;" class="col-25 tabColHeadBottom tabCol"></div>
-              <div style="border-style: solid none solid solid;" class="col-10 tabColHeadBottom tabCol"></div>
-              <div style="border-style: solid solid solid solid;" class="col-25 tabColHeadBottom tabCol">{{_prixHorsTax}}</div>
-            </div>
+        <div class="col" style="padding-bottom: 0;">
+          <div class="row"  style="padding-bottom: 0; color: #3c763d; height: 50px">
+            <div style="border-style: solid none solid solid;" class="col-33 tabColHeadBottom tabCol">Total HT</div>
+            <div style="border-style: solid none solid solid;" class="col-25 tabColHeadBottom tabCol"></div>
+            <div style="border-style: solid none solid solid;" class="col-10 tabColHeadBottom tabCol"></div>
+            <div style="border-style: solid solid solid solid;" class="col-25 tabColHeadBottom tabCol">{{_prixHorsTax}}</div>
           </div>
         </div>
+      </div>
 
       <div ng-show="infosBancaire.typecard === 'OM' && billet.code === 'sn'" class="row" style="padding-bottom: 0;">
         <div class="col" style="padding-bottom: 0;">
           <div class="row"  style="padding-bottom: 0; color: #3c763d; height: 50px">
-            <div style="border-style: solid none solid solid;" class="col-33 tabColHeadBottom tabCol">Commission OM(en %)</div>
+            <div style="border-style: solid none solid solid;" class="col-33 tabColHeadBottom tabCol">Commission OM</div>
             <div style="border-style: solid none solid solid;" class="col-25 tabColHeadBottom tabCol"></div>
             <div style="border-style: solid none solid solid;" class="col-10 tabColHeadBottom tabCol"></div>
-            <div style="border-style: solid solid solid solid;" class="col-25 tabColHeadBottom tabCol">{{billet.commission_om}}</div>
+            <div style="border-style: solid solid solid solid;" class="col-25 tabColHeadBottom tabCol">{{_montantCommission}}</div>
           </div>
         </div>
       </div>
@@ -409,10 +414,10 @@
       <div ng-show="infosBancaire.typecard === 'MTN' && billet.code === 'ci'" class="row" style="padding-bottom: 0;">
         <div class="col" style="padding-bottom: 0;">
           <div class="row"  style="padding-bottom: 0; color: #3c763d; height: 50px">
-            <div style="border-style: solid none solid solid;" class="col-33 tabColHeadBottom tabCol">Commission MTN(en %)</div>
+            <div style="border-style: solid none solid solid;" class="col-33 tabColHeadBottom tabCol">Commission MTN</div>
             <div style="border-style: solid none solid solid;" class="col-25 tabColHeadBottom tabCol"></div>
             <div style="border-style: solid none solid solid;" class="col-10 tabColHeadBottom tabCol"></div>
-            <div style="border-style: solid solid solid solid;" class="col-25 tabColHeadBottom tabCol">{{billet.commission_om}}</div>
+            <div style="border-style: solid solid solid solid;" class="col-25 tabColHeadBottom tabCol">{{_montantCommission}}</div>
           </div>
         </div>
       </div>
@@ -420,10 +425,10 @@
       <div ng-show="infosBancaire.typecard === 'Flooz'" class="row" style="padding-bottom: 0;">
         <div class="col" style="padding-bottom: 0;">
           <div class="row"  style="padding-bottom: 0; color: #3c763d; height: 50px">
-            <div style="border-style: solid none solid solid;" class="col-33 tabColHeadBottom tabCol">Commission Flooz(en %)</div>
+            <div style="border-style: solid none solid solid;" class="col-33 tabColHeadBottom tabCol">Commission Flooz</div>
             <div style="border-style: solid none solid solid;" class="col-25 tabColHeadBottom tabCol"></div>
             <div style="border-style: solid none solid solid;" class="col-10 tabColHeadBottom tabCol"></div>
-            <div style="border-style: solid solid solid solid;" class="col-25 tabColHeadBottom tabCol">{{billet.commission_flooz}}</div>
+            <div style="border-style: solid solid solid solid;" class="col-25 tabColHeadBottom tabCol">{{_montantCommission}}</div>
           </div>
         </div>
       </div>
@@ -431,10 +436,10 @@
       <div ng-show="infosBancaire.typecard === 'Wari'" class="row" style="padding-bottom: 0;">
         <div class="col" style="padding-bottom: 0;">
           <div class="row"  style="padding-bottom: 0; color: #3c763d; height: 50px">
-            <div style="border-style: solid none solid solid;" class="col-33 tabColHeadBottom tabCol">Commission Wari(en %)</div>
+            <div style="border-style: solid none solid solid;" class="col-33 tabColHeadBottom tabCol">Commission Wari</div>
             <div style="border-style: solid none solid solid;" class="col-25 tabColHeadBottom tabCol"></div>
             <div style="border-style: solid none solid solid;" class="col-10 tabColHeadBottom tabCol"></div>
-            <div style="border-style: solid solid solid solid;" class="col-25 tabColHeadBottom tabCol">{{billet.commission_wari}}</div>
+            <div style="border-style: solid solid solid solid;" class="col-25 tabColHeadBottom tabCol">{{_montantCommission}}</div>
           </div>
         </div>
       </div>
@@ -442,26 +447,26 @@
       <div ng-show="infosBancaire.typecard === 'Paypal'" class="row" style="padding-bottom: 0;">
         <div class="col" style="padding-bottom: 0;">
           <div class="row"  style="padding-bottom: 0; color: #3c763d; height: 50px">
-            <div style="border-style: solid none solid solid;" class="col-33 tabColHeadBottom tabCol">Commission Paypal(en %)</div>
+            <div style="border-style: solid none solid solid;" class="col-33 tabColHeadBottom tabCol">Commission Paypal</div>
             <div style="border-style: solid none solid solid;" class="col-25 tabColHeadBottom tabCol"></div>
             <div style="border-style: solid none solid solid;" class="col-10 tabColHeadBottom tabCol"></div>
             <div style="border-style: solid solid solid solid;" class="col-25 tabColHeadBottom tabCol">
-              {{billet.commission_paypal}}
+              {{_montantCommission}}
             </div>
           </div>
         </div>
       </div>
 
       <div ng-show="billet.surchage_paypal !== null && infosBancaire.typecard === 'Paypal'" class="row" style="padding-bottom: 0;">
-          <div class="col" style="padding-bottom: 0;">
-            <div class="row"  style="padding-bottom: 0; color: #3c763d; height: 50px">
-              <div style="border-style: solid none solid solid;" class="col-33 tabColHeadBottom tabCol">Surcharge paypal (en FCFA)</div>
-              <div style="border-style: solid none solid solid;" class="col-25 tabColHeadBottom tabCol"></div>
-              <div style="border-style: solid none solid solid;" class="col-10 tabColHeadBottom tabCol"></div>
-              <div style="border-style: solid solid solid solid;" class="col-25 tabColHeadBottom tabCol">{{billet.surchage_paypal}}</div>
-            </div>
+        <div class="col" style="padding-bottom: 0;">
+          <div class="row"  style="padding-bottom: 0; color: #3c763d; height: 50px">
+            <div style="border-style: solid none solid solid;" class="col-33 tabColHeadBottom tabCol">Surcharge paypal (en FCFA)</div>
+            <div style="border-style: solid none solid solid;" class="col-25 tabColHeadBottom tabCol"></div>
+            <div style="border-style: solid none solid solid;" class="col-10 tabColHeadBottom tabCol"></div>
+            <div style="border-style: solid solid solid solid;" class="col-25 tabColHeadBottom tabCol">{{billet.surchage_paypal}}</div>
           </div>
         </div>
+      </div>
 
       <div class="row" style="padding-bottom: 0; padding-top: 0">
         <div class="col" style="padding-bottom: 0; padding-top: 0">
@@ -469,7 +474,7 @@
             <div style="border-style: solid none solid solid;" class="col-33 tabColHeadBottom tabCol">TVA</div>
             <div style="border-style: solid none solid solid;" class="col-25 tabColHeadBottom tabCol"></div>
             <div style="border-style: solid none solid solid;" class="col-10 tabColHeadBottom tabCol"></div>
-            <div style="border-style: solid solid solid solid;" class="col-25 tabColHeadBottom tabCol">{{billet.tva}}</div>
+            <div style="border-style: solid solid solid solid;" class="col-25 tabColHeadBottom tabCol">{{_montantTva}}</div>
           </div>
         </div>
       </div>

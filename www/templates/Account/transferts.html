@@ -36,7 +36,7 @@
   </ion-content>
 </ion-view>
 
-
+<!-- <input type="text" ng-model="transfert2.telephone" placeholder="Numéro téléphone" /> -->
 <!-- Page modal pour le transfert de tickets transférés -->
 <script id="transfertTicket.html" type="text/ng-template">
   <ion-modal-view>
@@ -55,7 +55,9 @@
 
       <label class="item item-input">
         <i class="icon ion-android-phone-landscape placeholder-icon"></i>
-        <input type="text" ng-model="transfert2.telephone" placeholder="Numéro téléphone" />
+        <intlpn ng-model="transfert2.telephone" placeholder="Numéro téléphone" default-country="sn"
+          box-header-class="bar-energized" box-header-title="Rechercher un pays"
+          search-placeholder="Rerchercher..."></intlpn>
       </label>
 
       <div class="button-bar">

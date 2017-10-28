@@ -137,9 +137,13 @@ angular.module('app')
     };
 
     $scope._prixHorsTax = 0;
+    $scope._montantTva = 0;
+    $scope._montantCommission = 0;
     $scope.calculSommeTotalAchat = function(informationsBillets) {
       var somme = 0;
       $scope._prixHorsTax = 0;  
+      $scope._montantCommission = 0;
+      $scope._montantTva = 0;
       var x;
       var y;
       for (y = 0; y < informationsBillets.numero.length; y++) {
@@ -155,24 +159,32 @@ angular.module('app')
        
       switch($scope.infosBancaire.typecard) {
         case 'OM' :
+          $scope._montantCommission = (somme * Number($scope.billet.commission_om)/100);
           somme += (somme * Number($scope.billet.commission_om)/100);
           break;
         case 'MTN' : 
+          $scope._montantCommission = (somme * Number($scope.billet.commission_om)/100);
           somme += (somme * Number($scope.billet.commission_om)/100);
           break;
         case 'Flooz' : 
+          $scope._montantCommission = (somme * Number($scope.billet.commission_wari)/100);
           somme += (somme * Number($scope.billet.commission_wari)/100);
           break;
         case 'Wari' : 
+          $scope._montantCommission = (somme * Number($scope.billet.commission_wari)/100);
           somme += (somme * Number($scope.billet.commission_wari)/100);
           break;
         case 'Paypal' : 
+          $scope._montantCommission = (somme * Number($scope.billet.commission_paypal)/100);
           somme += ((somme * Number($scope.billet.commission_paypal))/100 +
                     Number($scope.billet.surchage_paypal));
           break;
         default:
           break;
       }
+
+      $scope._montantTva = Math.round(somme * Number($scope.billet.tva/100));
+      $scope._montantCommission = Math.round($scope._montantCommission);
       somme += somme * Number($scope.billet.tva/100);
       return Math.round(somme);
     }
