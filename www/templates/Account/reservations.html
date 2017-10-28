@@ -1,0 +1,32 @@
+<ion-view>
+  <ion-nav-title>
+    <!--<img src="img/logo.png" width="12%" style="vertical-align: middle"/>-->
+    <i style="font-size: x-large; vertical-align: middle; color: grey">SenPass</i>
+  </ion-nav-title>
+  <ion-content padding="true" class="has-header content">
+
+    <h3 style="text-align: center" ng-show="nbreReserves == 0"> {{ messageReserve }}</h3>
+
+    <div class="spinner">
+      <ion-spinner ng-show="loadingDone == 0"></ion-spinner>
+    </div>
+
+    <div class="list card" ng-repeat="reservation in BilletsReservations">
+      <div class="item item-image" style="height: 100px">
+        <image ng-src="{{ URL_IMAGE }}/uploads/Billets/{{ reservation.image }}"/>
+      </div>
+
+      <a class="item item-icon-left" ng-click="redirectToReservationDetail(reservation.id, reservation.idReservation)">
+        <i class="icon ion-location"></i>
+        <p style="word-wrap: break-word">Le {{ reservation.date_expiration | date:'dd' }}
+          {{ reservation.date_expiration | date:'MMMM' | convertDate }} - {{ reservation.lieu }}</p>
+        <i style="color: red; font-weight: bold; float: right;">+{{reservation.quantite }}</i>
+      </a>
+      <div class="button-bar button-full">
+        <a ng-click="redirectToReservationDetail(reservation.id, reservation.idReservation)"
+                class="button button-clear button-energized"><i class="ion ion-eye" style="font-size: 2em"></i></a>
+      </div>
+    </div>
+
+  </ion-content>
+</ion-view>

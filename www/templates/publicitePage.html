@@ -1,0 +1,31 @@
+<ion-view>
+  <ion-nav-title>
+    <!--<img src="img/logo.png" width="12%" style="vertical-align: middle"/>-->
+    <i style="font-size: x-large; vertical-align: middle; color: grey">SenPass</i>
+  </ion-nav-title>
+  <ion-content class="has-header content" scroll="false">
+
+    <h3 style="text-align: center" ng-show="nombrePublicites == 0" ng-bind="messagePublicites"></h3>
+
+    <div class="spinner">
+      <ion-spinner ng-show="loadingDone == 0"></ion-spinner>
+    </div>
+
+    <ion-slides  options="options">
+      <ion-slide-page ng-repeat="pub in Publicites">
+        <div class="item item-image my-item-image" style="height: 400px;"
+             ui-sref="tabsController.detailPublicite({ id: pub.id })">
+          <image ng-src="{{URL_IMAGE }}/uploads/Publicites/{{pub.image}}" height="auto" width="auto" />
+        </div>
+      </ion-slide-page>
+    </ion-slides>
+   <!--
+    <div class="list card" ng-repeat="pub in Publicites">
+      <div class="item item-image my-item-image" style="height: 400px;"
+           ui-sref="tabsController.detailPublicite({ id: pub.id })">
+        <image ng-src="{{URL_IMAGE }}/uploads/Publicites/{{pub.image}}" height="auto" width="auto" />
+      </div>
+    </div>-->
+
+  </ion-content>
+</ion-view>

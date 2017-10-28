@@ -1,0 +1,45 @@
+<ion-view title="Login">
+
+  <div class="background"></div>
+
+  <ion-content padding="true" class="has-header">
+
+    <p style="text-align: center; margin-top: 10%; margin-bottom: 10%">
+      <img src="img/logo.png" width="60%" style="vertical-align: middle"/>
+     <!-- <i style="font-size: xx-large; vertical-align: middle; color: white">SenPass</i> -->
+    </p>
+
+    <form class="list">
+      <ion-list>
+        <!--<label class="item item-input" name="login">-->
+          <!--<span class="input-label"><i class="ion-ios-telephone"></i></span>-->
+          <!--<input type="text" ng-model="credentials.username" placeholder="Identifiant">-->
+          <intlpn ng-model="credentials.username" placeholder="Identifiant" default-country="sn"
+                  box-header-class="bar-energized" box-header-title="Rechercher un pays"
+                  search-placeholder="Rerchercher..."></intlpn>
+        <!--</label>-->
+        <label class="item item-input" name="password">
+          <span class="input-label"><i class="ion-locked"></i></span>
+          <input type="password" ng-model="credentials.password" placeholder="Mot de passe" style="margin-left: -70px"/>
+        </label>
+      </ion-list>
+      <div class="spacer" style="height: 40px;"></div>
+      <a ng-click="login(credentials)" id="login-button1" class="login-button button button-balanced button-block">
+        Connexion
+      </a>
+
+    </form>
+    <p ng-click="loginWith('facebook')" style="float: left; margin-right: 3%;">
+      <button class="button icon ion-social-facebook"></button>        
+      <!-- <i style="font-size: 3em; color: #3b5999" class="icon ion-social-facebook"></i> -->
+    </p>
+    <p ng-click="loginWith('google')" style="float: left; margin-right: 6%;">
+      <button class="button icon icon ion-social-google"></button>        
+      <!-- <i style="font-size: 3em; color: #1da1f2" class="icon ion-social-google"></i> -->
+    </p>
+    <p style="float: right;">
+      <a class="icon ion-person-add" ng-click="inscrire()" style="color: white !important; font-size: 1.5em; margin-top: -4%">S'inscrire</a>
+    </p>
+    <br/><br/><br/>
+  </ion-content>
+</ion-view>

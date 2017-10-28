@@ -1,0 +1,63 @@
+<ion-view ng-cloak>
+  <!-- <ion-nav-title>
+    <img src="img/logo.png" width="12%" style="vertical-align: middle"/>
+    <i style="font-size: x-large; vertical-align: middle; color: grey">SenPass</i>
+  </ion-nav-title> -->
+  <ion-nav-buttons side="left">
+    <button class="button" ng-click="myGoBack()">
+      <i class="icon ion-chevron-left"></i> Retour
+    </button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <button class="button" ng-click="savePersonalInfos(informationsUser, informationsClient)">
+      <i class="icon ion-checkmark-round"></i> Enregistrer
+    </button>
+  </ion-nav-buttons>
+  <ion-content class="has-header content">
+
+    <ion-item class="item-profile">
+      <div class="item-avatar">
+        <image ng-show="photo == 1" ng-src="{{ URL_IMAGE }}/uploads/Profils/{{ informationsUser.avatar }}"
+               style="height: 200px; width: 100%"/>
+        <image ng-show="photo == 0" ng-src="img/avatar.png"
+               style="height: 100px; width: 100%"/>
+      </div>
+    </ion-item>
+
+    <!-- <form ng-submit="savePersonalInfos(informationsUser, informationsClient)"> -->
+    <form>
+      <ion-list>
+        <div class="item item-divider">
+        </div>
+
+        <label class="item item-input">
+          <i class="icon ion-person placeholder-icon"></i>
+          <input type="text" ng-model="informationsClient.prenom" placeholder="Prenom">
+        </label>
+        <label class="item item-input">
+          <input type="text" ng-model="informationsClient.nom" placeholder="Nom">
+        </label>
+      </ion-list>
+
+      <ion-list>
+        <div class="item item-divider">
+        </div>
+
+        <label class="item item-input">
+          <i class="ion-email placeholder-icon"></i>
+          <input type="text" ng-model="informationsUser.email" placeholder="Téléphone">
+        </label>
+        <label class="item item-input">
+          <i class="icon ion-ios-telephone placeholder-icon"></i>
+          <input type="text" ng-model="informationsUser.telephone" placeholder="email">
+        </label>
+        <label class="item item-input">
+          <i class="icon ion-location placeholder-icon"></i>
+          <input type="text" ng-model="informationsClient.adresse" placeholder="adresse">
+        </label>
+      </ion-list>
+      <!-- <button type="submit" class="button button-block button-positive">Envoyer</button> -->
+    </form>
+
+  </ion-content>
+</ion-view>

@@ -1,0 +1,67 @@
+<ion-view>
+  <ion-nav-title>
+    <!--<img src="img/logo.png" width="12%" style="vertical-align: middle"/>-->
+    <i style="font-size: x-large; vertical-align: middle; color: grey">SenPass</i>
+    <button style="margin-top: 2%; float: right;" ng-click="doSearch()" class="button icon ion-search"></button>
+  </ion-nav-title>
+  <ion-content class="has-header content">
+
+    <ion-refresher pulling-text="Chargement..." on-refresh="refresh()">
+    </ion-refresher>
+
+    <!--<label class="item item-input item-select">
+      <div class="input-label">
+        Rechercher par
+      </div>
+      <select
+          ng-model="criteriaSearch.id" ng-options="criteriaSearch.id as criteriaSearch.libelle for criteriaSearch in Criteres">
+      </select>
+    </label>
+    <div class="row">
+      <div class="col col-80">
+        <div class="list" style="margin: 0">
+          <label class="item item-input">
+            <input ng-model="criteriaSearch.keySearch" type="text" placeholder="Rechercher...">
+          </label>
+        </div>
+      </div>
+      <div class="col">
+        <button ng-click="doSearch()" class="button icon ion-search"></button>
+      </div>
+    </div>
+    -->
+    <label class="item item-input item-select">
+      <div class="input-label">
+        Catégories
+      </div>
+      <select ng-model="category.id" ng-change="idCategoryChange()"
+              ng-options="category.id as category.libelle for category in Categories">
+      </select>
+    </label>
+
+    <a ng-show="etudiant" ui-sref="tabsController.homePageRestauration"
+       class="button button-block button-assertive" style="margin-top: 0 !important;">Tickets Restauration</a>
+
+    <h3 style="text-align: center" ng-show="nombreBillets == 0" ng-bind="messageBillets"></h3>
+
+    <div class="spinner">
+      <ion-spinner ng-show="loadingDone == 0"></ion-spinner>
+    </div>
+
+    <div class="list card" ng-repeat="billet in Billets">
+      <div class="item item-image my-item-image">
+        <a ui-sref="tabsController.detailsBillet({ id: billet.id })">
+          <img style="width: 100%" src="https://www.sen-pass.com/web/uploads/Billets/{{billet.image}}" alt="">
+          <i ng-show="billet.is_free" style="font-size: 1.5em;float: right; color: red" class="icon ion-asterisk"></i>
+        </a>
+      </div>
+
+      <a class="item item-icon-left" ui-sref="tabsController.detailsBillet({ id: billet.id })">
+        <i class="icon ion-location"></i>
+        <p style="word-wrap: break-word">Le {{ billet.date_expiration | date:'dd' }}
+          {{ billet.date_expiration | date:'MMMM' | convertDate }} - {{ billet.lieu }}</p>
+      </a>
+    </div>
+
+  </ion-content>
+</ion-view>

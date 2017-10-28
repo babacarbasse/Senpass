@@ -1,0 +1,51 @@
+<ion-view>
+  <ion-nav-title>
+    <!--<img src="img/logo.png" width="12%" style="vertical-align: middle"/>-->
+    <i style="font-size: x-large; vertical-align: middle; color: grey">SenPass</i>
+  </ion-nav-title>
+  <!--<ion-content overflow-scroll="true" class="has-header">-->
+  <ion-content class="content">
+
+    <image ng-src="{{ URL_IMAGE }}/uploads/Billets/{{ DetailsArchive.image }}"
+           style="height: 200px; width: 100%"/>
+
+    <!--<div style="text-align: justify; padding: 2%">
+      <p ng-bind-html="DetailsArchive.description"></p>
+    </div>-->
+    <div class="list">
+      <a class="item item-icon-left" href="#">
+        Date :
+        <span class="item-note" style="color: black !important;">
+            {{ DetailsArchive.date_expiration | date:'dd/MM/yyyy, HH:mm'}}
+        </span>
+      </a>
+      <a class="item item-icon-left" href="#">
+        Prix (FCFA) :
+        <span class="item-note" style="color: black !important; font-weight: bold; font-size: 1.7em">
+            {{ DetailsArchive.prix_unitaire }}
+        </span>
+      </a>
+      <a class="item item-icon-left" href="#">
+        Type billet :
+        <span class="item-note" style="color: black !important;">
+            {{ DetailsArchive.type_billet.nom }}
+        </span>
+      </a>
+      <a class="item item-icon-left" href="#">
+        Fournisseur :
+        <span class="item-note" style="color: black !important; font-weight: bold; font-size: 1.2em">
+            {{ DetailsArchive.type_billet.billet.gerant.fournisseur.nom_organisation }}
+        </span>
+      </a>
+      <a class="item item-icon-left" href="#">
+        Date scan
+        <span class="item-note" style="color: black !important;">
+            {{ DetailsArchive.date_scan | date:'dd/MM/yyyy, HH:mm'}}
+        </span>
+      </a>
+    </div>
+
+    <img data-ng-src="data:image/png;base64,{{DetailsArchive.qrCode}}" data-err-src="images/png/avatar.png"/>
+
+  </ion-content>
+</ion-view>

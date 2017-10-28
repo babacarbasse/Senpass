@@ -1,0 +1,19 @@
+<ion-view cache-view="false">
+  <ion-nav-title>
+    <!--<img src="img/logo.png" width="12%" style="vertical-align: middle"/>-->
+    <i style="font-size: x-large; vertical-align: middle; color: grey">SenPass</i>
+  </ion-nav-title>
+  <ion-content padding="true" class="has-header content">
+
+    <ion-refresher pulling-text="Chargement..." on-refresh="refreshSolde()">
+    </ion-refresher>
+
+    <p>Nombre total de billets scannés</p>
+    <p style="margin-top: 30%; font-size: 7em; text-align: center; color: #5FCCB1">{{ nombreScans }}</p>
+<br /><br /><br /><br />
+<!--<button class="button button-appli button-small button-acheter" ng-click="resetSolde()">
+    <span class="text-button-acheter">Rénitialiser</span>
+</button> -->
+
+  </ion-content>
+</ion-view>

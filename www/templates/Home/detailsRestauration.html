@@ -1,0 +1,490 @@
+<ion-view>
+  <ion-nav-title>
+    <!--<img src="img/logo.png" width="12%" style="vertical-align: middle"/>-->
+    <i style="font-size: x-large; vertical-align: middle; color: grey">SenPass</i>
+  </ion-nav-title>
+  <!--<ion-content overflow-scroll="true" class="has-header">-->
+  <ion-content class="content">
+
+    <img style="width: 100%" src="https://www.sen-pass.com/web/uploads/Billets/{{billet.image}}" alt="">
+    
+    <div style="text-align: justify; padding: 2%">
+      <p ng-bind-html="billet.description"></p>
+    </div>
+
+    <div class="spinner">
+      <ion-spinner ng-show="loadingDone == 0"></ion-spinner>
+    </div>
+
+    <h3 style="text-align: center" ng-show="nombreType == 0" ng-bind="messageTypeBillets"></h3>
+
+    <div class="list">
+      <a class="item item-icon-left" href="#" ng-repeat="typeBillet in TypeBillet">
+        {{ typeBillet.nom }}
+        <p>
+          <span style="padding-left: 40%; color: rgb(255,102,0)">OM</span>
+          <span class="item-note" style="color: black !important;">
+            {{ typeBillet.prix_om }} F CFA
+          </span>
+        </p>
+        <p>
+          <span style="padding-left: 40%; color: rgb(40, 176, 74)">Wari</span>
+          <span class="item-note" style="color: black !important;">
+            {{ typeBillet.prix_wari }} F CFA
+          </span>
+        </p>
+        <p>
+          <span style="padding-left: 40%; color: rgb(18,55,133)">Paypal</span>
+          <span class="item-note" style="color: black !important;">
+            {{ typeBillet.prix_paypal }} F CFA
+          </span>
+        </p>
+        <br/>
+        <span class="item-note" style="color: black !important;">
+            {{ typeBillet.restant }} restants
+        </span>
+      </a>
+
+    </div>
+
+    <button class="button button-appli button-small button-acheter" ng-click="openModalBuy()">
+      <snap class="text-button-acheter">Acheter</snap>
+    </button>
+
+    <br/><br/><br/><br style="margin-bottom: 2%"/>
+
+  </ion-content>
+</ion-view>
+
+<!-- Page modal pour l'achat de tickets -->
+<script id="buy_tickets.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar>
+      <h1 class="title">Acheter un nouveau ticket</h1>
+    </ion-header-bar>
+    <ion-content>
+      <label class="item item-input item-select">
+        <div class="input-label">
+          Pour combien de personnes ?
+        </div>
+        <select ng-model="ticket.nbreTicket" ng-change="nbreTicketChange()">
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+          <option>6</option>
+          <option>7</option>
+          <option>8</option>
+          <option>9</option>
+          <option>10</option>
+        </select>
+      </label>
+
+      <div ng-repeat="ticket in items" ng-init="outerIndex=$index">
+        <div class="card">
+
+          <label class="item item-input">
+            <i class="icon ion-android-phone-landscape placeholder-icon"></i>
+            <input type="text" ng-model="achat.numero[outerIndex]" placeholder="Numéro téléphone" />
+          </label>
+
+          <!--<label ng-hide="billet.is_free" class="item item-input item-select">
+            <div class="input-label">
+              Type du billet
+            </div>
+            <select ng-model="achat.typeBillet[$index]"
+                    ng-options="typeBillet.id as typeBillet.nom for typeBillet in TypeBillet">
+            </select>
+          </label>-->
+
+          <ion-item ng-repeat="typeBillet in TypeBillet" ng-init="innerIndex=$index">
+            <ion-checkbox ng-model="achat.typeBillet[outerIndex][innerIndex]">{{ typeBillet.nom }}</ion-checkbox>
+            <label class="item item-input">
+              <input type="number" ng-model="achat.nbreTicket[outerIndex][innerIndex]" placeholder="Nombre de tickets" />
+            </label>
+          </ion-item>
+
+          <!--<label class="item item-input">
+            <input type="number" ng-model="achat.nbreTicket[$index]" placeholder="Nombre de tickets" />
+          </label>-->
+        </div>
+      </div>
+
+      <br/>
+
+      <label ng-hide="billet.is_free" class="item item-input item-select">
+        <div class="input-label">
+          Type de paiement
+        </div>
+        <select onchange="modePaiementChange()" ng-model="infosBancaire.typecard">
+          <option ng-show="billet.code === 'sn' " value="OM">Orange Money</option>
+          <option ng-show="billet.code === 'sn' " value="Wari">Wari</option>
+          <option ng-show="billet.code === 'ci' " value="Flooz">Flooz</option>
+          <option ng-show="billet.code === 'ci' " value="MTN">MTN</option>
+          <option value="Visa">Visa</option>
+          <option value="Mastercard">Mastercard</option>
+          <!-- <option value="Paypal">PayPal</option> -->
+        </select>
+      </label>
+      
+      <!--<ion-radio ng-model="paiementMethod" ng-value="'WARI'">Wari</ion-radio>
+      <ion-radio ng-model="paiementMethod" ng-value="'CB'">Cartes Bancaire</ion-radio>
+      <ion-radio ng-model="paiementMethod" ng-value="'OM'">Orange Money</ion-radio>-->
+
+      <button ng-click="openModalDetailAchat()" class="button button-appli button-small button-acheter" style="margin-bottom: 2% ;margin-left: 0;width: 100%;" >
+        <snap class="text-button-acheter">Détails achat</snap>
+      </button>
+      
+      <br/><br/>
+
+      <!-- DEBUT - DIV DE PAIEMENT DE WARI -->
+      <div ng-show="infosBancaire.typecard == 'Wari'" style="background-color: rgb(40, 176, 74)">
+        <label style="padding: 1.5%; font-size: 1.5em">Informations paiement</label>
+        <label ng-hide="billet.is_free" class="item item-input">
+          <div class="input-label">
+            Numéro carte
+          </div>
+          <input type="number" ng-model="infosBancaire.cardnumber" placeholder="Numéro carte">
+        </label>
+
+        <label ng-hide="billet.is_free" class="item item-input">
+          <div class="input-label">
+            Cryptogramme visuel
+          </div>
+          <input type="number" ng-model="infosBancaire.cvv" placeholder="CVV">
+        </label>
+
+        <label ng-hide="billet.is_free" class="item item-input">
+          <div class="input-label">
+            Expiration (Mois)
+          </div>
+          <!--<input type="number" ng-model="infosBancaire.expiredate" placeholder="Ex : 1707"/> -->
+          <select ng-model="infosBancaire.mois">
+            <option value="01">Janvier</option>
+            <option value="02">Février</option>
+            <option value="03">Mars</option>
+            <option value="04">Avril</option>
+            <option value="05">Mai</option>
+            <option value="06">Juin</option>
+            <option value="07">Juillet</option>
+            <option value="08">Août</option>
+            <option value="09">Septembre</option>
+            <option value="10">Octobre</option>
+            <option value="11">Novembre</option>
+            <option value="12">Décembre</option>
+          </select>
+        </label>
+
+        <label ng-hide="billet.is_free" class="item item-input">
+          <div class="input-label">
+            Expiration (Année)
+          </div>
+          <select ng-model="infosBancaire.annee">
+            <option value="16">2016</option>
+            <option value="17">2017</option>
+            <option value="18">2018</option>
+            <option value="19">2019</option>
+            <option value="20">2020</option>
+            <option value="21">2021</option>
+            <option value="22">2022</option>
+            <option value="23">2023</option>
+            <option value="24">2024</option>
+            <option value="25">2025</option>
+          </select>
+        </label>
+      </div>
+      <!-- FIN - DIV DE PAIEMENT DE WARI-->
+
+      <!-- DEBUT - DIV DE PAIEMENT DE CARTE BANCAIRE -->
+      <div ng-show="infosBancaire.typecard == 'Visa' || infosBancaire.typecard == 'Mastercard'"
+           style="background-color: rgb(140, 16, 174)">
+        <label style="padding: 1.5%; font-size: 1.5em">Informations paiement</label>
+        <label ng-hide="billet.is_free" class="item item-input">
+          <div class="input-label">
+            Numéro carte
+          </div>
+          <input type="text" ng-model="infosBancaire.cardnumber" placeholder="Numéro carte">
+        </label>
+
+        <label ng-hide="billet.is_free" class="item item-input">
+          <div class="input-label">
+            Cryptogramme visuel
+          </div>
+          <input type="number" ng-model="infosBancaire.cvv" placeholder="CVV">
+        </label>
+
+        <label ng-hide="billet.is_free" class="item item-input">
+          <div class="input-label">
+            Email
+          </div>
+          <input type="email" ng-model="infosBancaire.email" placeholder="Email">
+        </label>
+
+        <label ng-hide="billet.is_free" class="item item-input">
+          <div class="input-label">
+            Nom
+          </div>
+          <input type="text" ng-model="infosBancaire.lastname" placeholder="Nom">
+        </label>
+
+        <label ng-hide="billet.is_free" class="item item-input">
+          <div class="input-label">
+            Prénom
+          </div>
+          <input type="text" ng-model="infosBancaire.firstname" placeholder="Prénom">
+        </label>
+
+        <label ng-hide="billet.is_free" class="item item-input">
+          <div class="input-label">
+            Expiration (Mois)
+          </div>
+          <!--<input type="number" ng-model="infosBancaire.expiredate" placeholder="Ex : 1707"/> -->
+          <select ng-model="infosBancaire.mois">
+            <option value="01">Janvier</option>
+            <option value="02">Février</option>
+            <option value="03">Mars</option>
+            <option value="04">Avril</option>
+            <option value="05">Mai</option>
+            <option value="06">Juin</option>
+            <option value="07">Juillet</option>
+            <option value="08">Août</option>
+            <option value="09">Septembre</option>
+            <option value="10">Octobre</option>
+            <option value="11">Novembre</option>
+            <option value="12">Décembre</option>
+          </select>
+        </label>
+
+        <label ng-hide="billet.is_free" class="item item-input">
+          <div class="input-label">
+            Expiration (Année)
+          </div>
+          <select ng-model="infosBancaire.annee">
+            <option value="16">2016</option>
+            <option value="17">2017</option>
+            <option value="18">2018</option>
+            <option value="19">2019</option>
+            <option value="20">2020</option>
+            <option value="21">2021</option>
+            <option value="22">2022</option>
+            <option value="23">2023</option>
+            <option value="24">2024</option>
+            <option value="25">2025</option>
+          </select>
+        </label>
+      </div>
+      <!-- FIN - DIV DE PAIEMENT DE CARTE BANCAIRE-->
+
+      <!-- DEBUT - DIV DE PAIEMENT DE ORANGE MONEY -->
+      <div ng-show="infosBancaire.typecard == 'OM'" style="background-color: rgb(255,102,0)" id="orangeMoney">
+        <input type="hidden" ng-model="infosBancaireOM.S2M_COMMANDE" />
+        <input type="hidden" ng-model="infosBancaireOM.S2M_DATEH" />
+        <input type="hidden" ng-model="infosBancaireOM.S2M_HMAC" />
+        <input type="hidden" ng-model="infosBancaireOM.S2M_HTYPE" />
+        <input type="hidden" ng-model="infosBancaireOM.S2M_IDENTIFIANT" />
+        <input type="hidden" ng-model="infosBancaireOM.S2M_REF_COMMANDE" />
+        <input type="hidden" ng-model="infosBancaireOM.S2M_SITE" />
+        <input type="hidden" ng-model="infosBancaireOM.S2M_TOTAL" />
+
+      </div>
+      <!-- FIN - DIV DE PAIEMENT DE MONEY-->
+
+      <div class="button-bar">
+        <a style="background-color: rgb(40, 176, 74); color: white" ng-if="infosBancaire.typecard == 'Wari'"
+           ng-hide="billet.is_free"
+           class="button" ng-click="buyTicketWARI(achat, infosBancaire, billet.id)">Acheter</a>
+        <a style="background-color: rgb(140, 16, 174); color: white"
+           ng-if="infosBancaire.typecard == 'Visa' ||infosBancaire.typecard == 'Mastercard'" ng-hide="billet.is_free"
+           class="button" ng-click="buyTicketCB(achat, infosBancaire, billet.id)">Acheter</a>
+        <a style="background-color: rgb(255,102,0); color: white" ng-if="infosBancaire.typecard == 'OM'" ng-hide="billet.is_free"
+           class="button" ng-click="buyTicketOM(achat, infosBancaireOM, billet.id)">Acheter</a>
+        <a style="background-color: rgb(18,55,133); color: white" ng-if="infosBancaire.typecard == 'Paypal'" ng-hide="billet.is_free"
+           class="button" ng-click="buyTicketPaypal(achat, infosBancaireOM, billet.id)">Acheter</a>
+        
+        <a style="background-color: rgb(255, 199, 16); color: white" ng-if="infosBancaire.typecard == 'MTN'"
+            ng-hide="billet.is_free"
+            class="button" ng-click="buyTicketMTN(achat, billet.id)">Acheter</a>
+        <a style="background-color: rgb(34, 118, 210); color: white" ng-if="infosBancaire.typecard == 'Flooz'"
+            ng-hide="billet.is_free"
+            class="button" ng-click="buyTicketFlooz(achat, billet.id)">Acheter</a>
+        
+        <a ng-show="billet.is_free" class="button button-positive" ng-click="reserverTicket(achat, billet.id)">Réserver</a>
+        <a class="button" ng-click="closeModalBuy()">Annuler</a>
+      </div>
+
+      <br/><br/><br/><br style="margin-bottom: 2%"/>
+    </ion-content>
+  </ion-modal-view>
+</script>
+
+
+<!-- Page modal pour l'achat de tickets -->
+<script id="code_otp.html" type="text/ng-template">
+    <ion-modal-view>
+    <ion-header-bar>
+      <h1 class="title">Saisir votre code OTP</h1>
+    </ion-header-bar>
+    <ion-content>
+
+    <label class="item item-input">
+    <i class="icon ion-android-phone-landscape placeholder-icon"></i>
+    <input type="text" ng-model="OTP.otp" placeholder="Code OTP">
+    </label>
+
+    <label class="item item-input">
+    <i class="icon ion-android-phone-landscape placeholder-icon"></i>
+    <input type="text" ng-model="OTP.transid" placeholder="Id transaction">
+    </label>
+
+    <div class="button-bar">
+    <a class="button button-positive" ng-click="registerOTPAndPurchase(achat, OTP, billet.id)">Acheter</a>
+    <a class="button" ng-click="closeModalOTP()">Annuler</a>
+    </div>
+    </ion-content>
+    </ion-modal-view>
+</script>
+
+<script id="detailAchat.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar>
+      <h1 class="title">Détail Achat</h1>
+    </ion-header-bar>
+    <ion-content style="margin-left: -2%; margin-right: -8%">
+      <div class="row" style="padding-bottom: 0;">
+        <div class="col" style="padding-bottom: 0;">
+          <div class="row"  style="padding-bottom: 0; color: #3c763d;  font-weight: bold; height: 40px">
+            <div style="border-style: solid none solid solid;" class="col-33 tabColHeadBottom tabCol">Info</div>
+            <div style="border-style: solid none solid solid;" class="col-25 tabColHeadBottom tabCol">Type</div>
+            <div style="border-style: solid none solid solid;" class="col-10 tabColHeadBottom tabCol">Qt</div>
+            <div style="border-style: solid solid solid solid;" class="col-25 tabColHeadBottom tabCol">Mt (FCFA)</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row" style="padding-top: 0; padding-bottom: 0;" 
+                ng-repeat="ach in achat.numero" ng-init="indexAchat=$index">
+        <div class="col" style="padding-top: 0; padding-bottom: 0;">
+          <div style="height: 80px" ng-repeat="type in achat.typeBillet[indexAchat]" ng-init="indexType=$index" 
+              ng-show="type == true && achat.nbreTicket[indexAchat][indexType] != null && 
+              achat.nbreTicket[indexAchat][indexType] != 0" class="row">
+            <div style="border-style: solid none solid solid;" class="col-33 tabCol">
+              {{ach}}
+            </div>
+            <div style="border-style: solid none solid solid;" class="col-25 tabCol">
+              {{TypeBillet[indexType].prix}}
+            </div>
+            <div style="border-style: solid none solid solid;" class="col-10 tabCol">
+              {{ achat.nbreTicket[indexAchat][indexType]  }}
+            </div>
+            <div style="border-style: solid solid solid solid;" class="col-25 tabCol">
+              {{ TypeBillet[indexType].prix*achat.nbreTicket[indexAchat][indexType] }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="padding-bottom: 0;">
+          <div class="col" style="padding-bottom: 0;">
+            <div class="row"  style="padding-bottom: 0; color: #3c763d; height: 50px">
+              <div style="border-style: solid none solid solid;" class="col-33 tabColHeadBottom tabCol">Total HT</div>
+              <div style="border-style: solid none solid solid;" class="col-25 tabColHeadBottom tabCol"></div>
+              <div style="border-style: solid none solid solid;" class="col-10 tabColHeadBottom tabCol"></div>
+              <div style="border-style: solid solid solid solid;" class="col-25 tabColHeadBottom tabCol">{{_prixHorsTax}}</div>
+            </div>
+          </div>
+        </div>
+
+      <div ng-show="infosBancaire.typecard === 'OM' && billet.code === 'sn'" class="row" style="padding-bottom: 0;">
+        <div class="col" style="padding-bottom: 0;">
+          <div class="row"  style="padding-bottom: 0; color: #3c763d; height: 50px">
+            <div style="border-style: solid none solid solid;" class="col-33 tabColHeadBottom tabCol">Commission OM(en %)</div>
+            <div style="border-style: solid none solid solid;" class="col-25 tabColHeadBottom tabCol"></div>
+            <div style="border-style: solid none solid solid;" class="col-10 tabColHeadBottom tabCol"></div>
+            <div style="border-style: solid solid solid solid;" class="col-25 tabColHeadBottom tabCol">{{billet.commission_om}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div ng-show="infosBancaire.typecard === 'MTN' && billet.code === 'ci'" class="row" style="padding-bottom: 0;">
+        <div class="col" style="padding-bottom: 0;">
+          <div class="row"  style="padding-bottom: 0; color: #3c763d; height: 50px">
+            <div style="border-style: solid none solid solid;" class="col-33 tabColHeadBottom tabCol">Commission MTN(en %)</div>
+            <div style="border-style: solid none solid solid;" class="col-25 tabColHeadBottom tabCol"></div>
+            <div style="border-style: solid none solid solid;" class="col-10 tabColHeadBottom tabCol"></div>
+            <div style="border-style: solid solid solid solid;" class="col-25 tabColHeadBottom tabCol">{{billet.commission_om}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div ng-show="infosBancaire.typecard === 'Flooz'" class="row" style="padding-bottom: 0;">
+        <div class="col" style="padding-bottom: 0;">
+          <div class="row"  style="padding-bottom: 0; color: #3c763d; height: 50px">
+            <div style="border-style: solid none solid solid;" class="col-33 tabColHeadBottom tabCol">Commission Flooz(en %)</div>
+            <div style="border-style: solid none solid solid;" class="col-25 tabColHeadBottom tabCol"></div>
+            <div style="border-style: solid none solid solid;" class="col-10 tabColHeadBottom tabCol"></div>
+            <div style="border-style: solid solid solid solid;" class="col-25 tabColHeadBottom tabCol">{{billet.commission_flooz}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div ng-show="infosBancaire.typecard === 'Wari'" class="row" style="padding-bottom: 0;">
+        <div class="col" style="padding-bottom: 0;">
+          <div class="row"  style="padding-bottom: 0; color: #3c763d; height: 50px">
+            <div style="border-style: solid none solid solid;" class="col-33 tabColHeadBottom tabCol">Commission Wari(en %)</div>
+            <div style="border-style: solid none solid solid;" class="col-25 tabColHeadBottom tabCol"></div>
+            <div style="border-style: solid none solid solid;" class="col-10 tabColHeadBottom tabCol"></div>
+            <div style="border-style: solid solid solid solid;" class="col-25 tabColHeadBottom tabCol">{{billet.commission_wari}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div ng-show="infosBancaire.typecard === 'Paypal'" class="row" style="padding-bottom: 0;">
+        <div class="col" style="padding-bottom: 0;">
+          <div class="row"  style="padding-bottom: 0; color: #3c763d; height: 50px">
+            <div style="border-style: solid none solid solid;" class="col-33 tabColHeadBottom tabCol">Commission Paypal(en %)</div>
+            <div style="border-style: solid none solid solid;" class="col-25 tabColHeadBottom tabCol"></div>
+            <div style="border-style: solid none solid solid;" class="col-10 tabColHeadBottom tabCol"></div>
+            <div style="border-style: solid solid solid solid;" class="col-25 tabColHeadBottom tabCol">
+              {{billet.commission_paypal}}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div ng-show="billet.surchage_paypal !== null && infosBancaire.typecard === 'Paypal'" class="row" style="padding-bottom: 0;">
+          <div class="col" style="padding-bottom: 0;">
+            <div class="row"  style="padding-bottom: 0; color: #3c763d; height: 50px">
+              <div style="border-style: solid none solid solid;" class="col-33 tabColHeadBottom tabCol">Surcharge paypal (en FCFA)</div>
+              <div style="border-style: solid none solid solid;" class="col-25 tabColHeadBottom tabCol"></div>
+              <div style="border-style: solid none solid solid;" class="col-10 tabColHeadBottom tabCol"></div>
+              <div style="border-style: solid solid solid solid;" class="col-25 tabColHeadBottom tabCol">{{billet.surchage_paypal}}</div>
+            </div>
+          </div>
+        </div>
+
+      <div class="row" style="padding-bottom: 0; padding-top: 0">
+        <div class="col" style="padding-bottom: 0; padding-top: 0">
+          <div class="row"  style="padding-bottom: 0; color: #3c763d; height: 50px">
+            <div style="border-style: solid none solid solid;" class="col-33 tabColHeadBottom tabCol">TVA</div>
+            <div style="border-style: solid none solid solid;" class="col-25 tabColHeadBottom tabCol"></div>
+            <div style="border-style: solid none solid solid;" class="col-10 tabColHeadBottom tabCol"></div>
+            <div style="border-style: solid solid solid solid;" class="col-25 tabColHeadBottom tabCol">{{billet.tva}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="padding-bottom: 0; padding-top: 0">
+        <div class="col" style="padding-bottom: 0;; padding-top: 0">
+          <div class="row"  style="padding-bottom: 0; padding-top: 0; color: #3c763d; font-weight: bold; height: 50px">
+            <div style="border-style: solid none solid solid;" class="col-33 tabColHeadBottom tabCol">Total</div>
+            <div style="border-style: solid none solid solid;" class="col-25 tabColHeadBottom tabCol"></div>
+            <div style="border-style: solid none solid solid;" class="col-10 tabColHeadBottom tabCol"></div>
+            <div style="border-style: solid solid solid solid;" class="col-25 tabColHeadBottom tabCol">{{ calculSommeTotalAchat(achat) }}</div>
+          </div>
+        </div>
+      </div>
+     
+    </ion-conten>
+  </ion-modal-view>
+</script>

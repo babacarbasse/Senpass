@@ -1,1 +1,200 @@
-/* Empty. Add your own CSS if you like */
+/* ICI REPOSE CSS */
+
+.background {
+  background-image: url('../img/background.png');
+  background-size: cover;
+  opacity: 0.7;
+  width: 100vw;
+  height: 100vh;
+
+  -webkit-filter: blur(2px);
+  -moz-filter: blur(2px);
+  -o-filter: blur(2px);
+  -ms-filter: blur(2px);
+  filter: blur(2px);
+}
+
+.button-appli {
+  line-height: 40px;
+  border-radius: 0 !important;
+  color: white;
+  background-color: #5FCCB1;
+}
+
+.login-button {
+  font-weight: bold;
+  background-color: #5FCCB1;
+  border: 0;
+}
+
+.item-profile {
+  height: 150px;
+}
+
+.item-avatar > img:first-child {
+  max-width: 100px;
+  max-height: 100px;
+  left: 35vw;
+}
+
+.content {
+  background-color: #F3F3F3;
+}
+
+.card-achat {
+  height: 150px;
+  background: #ef473a;
+  text-align: center;
+  padding-top: 65px;
+  color: white;
+  font-size: x-large;
+}
+
+.card-reservation {
+  height: 150px;
+  background: #5FCCB1;
+  text-align: center;
+  padding-top: 65px;
+  color: white;
+  font-size: x-large;
+}
+
+.card-transfert {
+  height: 150px;
+  background: #e6b500;
+  text-align: center;
+  padding-top: 65px;
+  color: white;
+  font-size: x-large;
+}
+
+.card-restauration {
+  height: 150px;
+  background: #0a9dc7;
+  text-align: center;
+  padding-top: 65px;
+  color: white;
+  font-size: x-large;
+}
+
+.card-archive {
+  height: 150px;
+  background: #e6d500;
+  text-align: center;
+  padding-top: 65px;
+  color: white;
+  font-size: x-large;
+}
+
+.blur-card {
+  opacity: 0.1;
+}
+.surbrillance {
+  background-color: lavender;
+}
+
+.messageLeft:first-child {
+  margin-top: 4%;
+}
+
+.messageLeft {
+  display: inline-block;
+  margin-left: 2%;
+  position: relative;
+  width: 75%;
+  padding-left: 3%;
+  line-height: 40px;
+  background-color: #F3F3F3;
+
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  border-radius: 7px;
+  -webkit-box-shadow: 2px 2px 4px #888;
+  -moz-box-shadow: 2px 2px 4px #888;
+  box-shadow: 2px 2px 4px #888;
+}
+
+.messageRight {
+  float: right;
+  display: inline-block;
+  margin-right: 2%;
+  position: relative;
+  width: 75%;
+  padding-left: 3%;
+  line-height: 40px;
+  background-color: #5FCCB1;
+
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  border-radius: 7px;
+  -webkit-box-shadow: 2px 2px 4px #888;
+  -moz-box-shadow: 2px 2px 4px #888;
+  box-shadow: 2px 2px 4px #888;
+}
+
+.date_left {
+  float: left;
+  font-size: 0.5em;
+  text-align: center;
+  vertical-align: middle;
+  align-content: center;
+}
+
+.date_right {
+  float: right;
+  font-size: 0.5em;
+  text-align: center;
+  vertical-align: middle;
+  align-content: center;
+}
+
+.time_message {
+  float: right;
+  padding-right: 2%;
+  color: black;
+  font-size: 0.7em;
+}
+
+.button-acheter {
+  width: 70%;
+  margin-left: 15%;
+}
+
+.text-button-acheter {
+  font-size: 2em;
+}
+
+.spinner {
+  margin: auto;
+  position: absolute;
+  top: 100px;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 45px;
+  text-align: center;
+}
+
+.spinner svg {
+  width: 19% !important;
+  height: 45px !important;
+}
+
+.my-bar-senpass {
+  background-color: #5FCCB1 !important;
+}
+
+#myCanvas {
+  background: #ABABAB;
+  position: relative;
+  z-index: 1;
+}
+
+.tabCol {
+  border-color: green;
+  border-width: 1px
+}
+
+.tabColHeadBottom {
+  background-image: -webkit-linear-gradient(top, #dff0d8 0%, #c8e5bc 100%);
+}

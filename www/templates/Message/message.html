@@ -1,0 +1,37 @@
+<ion-view>
+  <ion-nav-title>
+    <!--<img src="img/logo.png" width="12%" style="vertical-align: middle"/>-->
+    <i style="font-size: x-large; vertical-align: middle; color: grey">SenPass</i>
+  </ion-nav-title>
+  <ion-content class="has-header content">
+
+    <p on-hold="openPopover($event, message.id)" style="margin-top: 2%" ng-repeat="message in discussion.message"
+       ng-class="{messageLeft: message.auteur.id != idUser, messageRight: message.auteur.id == idUser}">
+      <span ng-show="message.delete_by.id != idUser">
+        {{ message.contenu }} <i class="time_message">{{ message.date_envoie | date: 'HH:mm'}}</i>
+      </span>
+    </p>
+
+  </ion-content>
+  <br /><br /><br />
+
+  <ion-footer-bar align-title="left" class="bar-assertive my-bar-senpass">
+    <label class="item item-input" style="width: 80%">
+      <input type="text" ng-model="reponse" placeholder="" />
+    </label>
+    <i ng-show= "reponse != null && reponse != ''"
+       class="icon ion-android-send" style="margin-left: 4%; font-size: 2em" ng-click="sendMessage(reponse, discussion.id)"></i>
+  </ion-footer-bar>
+
+</ion-view>
+
+<script id="my-popover.html" type="text/ng-template">
+  <ion-popover-view style="height: 200px;">
+    <ion-header-bar>
+      <h1 class="title">Actions</h1>
+    </ion-header-bar>
+    <ion-content>
+      <a class="button button-assertive button-block" ng-click="deleteMessage(toDelete)">Supprimer</a>
+    </ion-content>
+  </ion-popover-view>
+</script>

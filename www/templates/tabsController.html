@@ -1,0 +1,61 @@
+<ion-view title="Tabs Controller">
+  <ion-tabs class="tabs-stable tabs-icon-top tabs-color-active-positive">
+
+    <ion-tab title="SenPass" icon="ion-home" href="#/page1/home" class=" {{ hideMessage() }} ">
+      <ion-nav-bar align="center" class="bar-stable">
+        <ion-nav-back-button class="button-icon icon ion-ios-arrow-back">Retour</ion-nav-back-button>
+      </ion-nav-bar>
+      <ion-nav-view name="tab1"></ion-nav-view>
+    </ion-tab>
+
+    <!--<ion-tab title="Message" icon="ion-android-textsms" href="#/page1/message"-->
+    <ion-tab title="Messages"  badge="countRecuUnread"  badge-style="badge-assertive"
+             icon="ion-android-textsms" href="#/page1/message" class=" {{ hideMessage() }} ">
+      <ion-nav-bar align="center" class="bar-stable">
+        <ion-nav-back-button class="button-icon icon ion-ios-arrow-back">Retour</ion-nav-back-button>
+      </ion-nav-bar>
+      <ion-nav-view name="tab22"></ion-nav-view>
+    </ion-tab>
+
+    <!--<ion-tab title="Message" icon="ion-android-textsms" href="#/page1/message"-->
+    <!--<ion-tab ng-click="scann()" title="Scanner" icon="ion-qr-scanner"-->
+    <!--<ion-tab ng-controller="ScanController" ng-click="scannnn()" title="Scanner" icon="ion-qr-scanner"-->
+    <ion-tab ui-sref="tabsController.scan" title="Scanner" icon="ion-qr-scanner"
+             class=" {{ hideScanner() }} ">
+      <ion-nav-bar align="center" class="bar-stable">
+        <ion-nav-back-button class="button-icon icon ion-ios-arrow-back">Retour</ion-nav-back-button>
+      </ion-nav-bar>
+      <ion-nav-view name="tab2"></ion-nav-view>
+    </ion-tab>
+
+    <ion-tab title="Mon Compte" icon="ion-person" href="#/page1/account" class=" {{ hideMessage() }}">
+      <ion-nav-bar align="center" class="bar-stable">
+        <ion-nav-back-button class="button-icon icon ion-ios-arrow-back">Retour</ion-nav-back-button>
+      </ion-nav-bar>
+      <ion-nav-view name="tab3"></ion-nav-view>
+    </ion-tab>
+
+    <ion-tab title="Publicités" badge="nbrePubs" badge-style="badge-assertive"
+             icon="ion-bag" href="#/page1/publicite" class=" {{ hideMessage() }}">
+      <ion-nav-bar align="center" class="bar-stable">
+        <ion-nav-back-button class="button-icon icon ion-ios-arrow-back">Retour</ion-nav-back-button>
+      </ion-nav-bar>
+      <ion-nav-view name="tab5"></ion-nav-view>
+    </ion-tab>
+
+    <ion-tab title="Solde scans" icon="ion-person" href="#/page1/soldeScan" class=" {{ hideScanner() }}">
+      <ion-nav-bar align="center" class="bar-stable">
+        <ion-nav-back-button class="button-icon icon ion-ios-arrow-back">Retour</ion-nav-back-button>
+      </ion-nav-bar>
+      <ion-nav-view name="tab33"></ion-nav-view>
+    </ion-tab>
+
+    <ion-tab title="Plus" icon="ion-navicon-round" href="#/page1/plus">
+      <ion-nav-bar align="center" class="bar-stable">
+        <!-- <ion-nav-back-button class="button-icon icon ion-ios-arrow-back">Retour</ion-nav-back-button> -->
+      </ion-nav-bar>
+      <ion-nav-view name="tab4"></ion-nav-view>
+    </ion-tab>
+
+  </ion-tabs>
+</ion-view>

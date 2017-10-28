@@ -1,0 +1,69 @@
+<ion-view>
+  <ion-nav-title>
+    <!--<img src="img/logo.png" width="12%" style="vertical-align: middle"/>-->
+    <i style="font-size: x-large; vertical-align: middle; color: grey">SenPass</i>
+    <button style="margin-top: 2%; float: right;" ng-click="doSearch()" class="button icon ion-search"></button>
+  </ion-nav-title>
+
+  <ion-content class="has-header content">
+
+    <ti-segmented-control on-select="buttonClicked($index)" class="bar bar-header">
+      <ti-segmented-control-button class="button-positive" title="'Reçus'" selected></ti-segmented-control-button>
+      <ti-segmented-control-button class="button-positive" title="'Envoyés'"></ti-segmented-control-button>
+    </ti-segmented-control>
+    <br style="margin-top: 200px;"/>
+    <br style="margin-top: 200px;"/>
+    <br style="margin-top: 200px;"/>
+
+    <a ng-show="messageAdmin"
+       class="button button-block button-assertive" style="margin-top: 0 !important;">Voir les messages de l'administrateur</a>
+
+    <br style="margin-top: 200px;"/>
+
+    <h3 style="text-align: center" ng-show="nbreMessageRecus == 0 && selectedIndex == 0"> {{ messageInfoRecu }}</h3>
+    <h3 style="text-align: center" ng-show="nbreMessageInitie == 0 && selectedIndex == 1"> {{ messageInfoInitie }}</h3>
+
+
+    <ion-list>
+      <div class="spinner">
+        <ion-spinner ng-show="loadingDone == 0"></ion-spinner>
+      </div>
+
+      <ion-item on-hold="openPopover($event)" ng-repeat="discussion in DiscussionsInities | orderBy: '-lastMessage.date_envoie'"
+                class="item item-avatar-left" ui-sref="tabsController.detailMessage({ id: discussion.id })">
+        <img src="img/logo.png" />
+        <h2>{{ discussion.destinataire.email }}</h2>
+        <p> {{ discussion.lastMessage.contenu }} </p>
+        <p style="float: right; font-size: 0.5em"> {{ discussion.lastMessage.date_envoie | date: 'dd/MM/yy'}} </p>
+        <ion-option-button class="button-assertive" ng-click="deleteDiscussion(discussion.id)">
+          Supprimer
+        </ion-option-button>
+      </ion-item>
+
+      <ion-item ng-repeat="discussion in DiscussionsRecus | orderBy: '-lastMessage.date_envoie'"
+                class="item item-avatar-left" ui-sref="tabsController.detailMessage({ id: discussion.id })"
+                ng-click="readMessage( discussion.lastMessage )">
+        <img src="img/logo.png" />
+        <span ng-show="discussion.lu"><h2>{{ discussion.expediteur.email }}</h2></span>
+        <span ng-show="!discussion.lu"><h2 style="color: red">{{ discussion.expediteur.email }}</h2></span>
+        <p> {{ discussion.lastMessage.contenu }} </p>
+        <p style="float: right; font-size: 0.5em"> {{ discussion.lastMessage.date_envoie | date: 'dd/MM/yy'}} </p>
+        <ion-option-button class="button-assertive" ng-click="deleteDiscussion(discussion.id)">
+          Supprimer
+        </ion-option-button>
+      </ion-item>
+    </ion-list>
+
+  </ion-content>
+</ion-view>
+
+<script id="my-popover.html" type="text/ng-template">
+  <ion-popover-view>
+    <ion-header-bar>
+      <h1 class="title">Actions</h1>
+    </ion-header-bar>
+    <ion-content>
+      <a class="button" ng-click="closeModalTransfert()">Annuler</a>
+    </ion-content>
+  </ion-popover-view>
+</script>

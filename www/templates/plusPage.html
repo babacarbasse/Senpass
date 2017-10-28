@@ -1,0 +1,138 @@
+<ion-view>
+  <ion-nav-title>
+    <!--<img src="img/logo.png" width="12%" style="vertical-align: middle"/>-->
+    <i style="font-size: x-large; vertical-align: middle; color: grey">SenPass</i>
+  </ion-nav-title>
+  <ion-content class="has-header content">
+    <ion-list>
+      <ion-item ui-sref="tabsController.informationsPerso" class="item-thumbnail-left">
+        <image ng-show="noPhoto == 0" ng-src="{{ URL_IMAGE }}/uploads/Profils/{{ myAvatarUser }}"
+               style="height: 200px; width: 100%"/>
+        <image ng-show="noPhoto == 1" src="img/avatar.png"
+               style="height: 100px; width: 100%; float: left;"/>
+        <h2></h2>
+        <p>Informations personnelles</p>
+      </ion-item>
+    </ion-list>
+    <button style="font-size:2em"
+            class="button button-appli button-small button-block {{ hideScanner() }}" ng-click="resetSolde()">
+      Réinitialiser Scanner</button>
+    <ion-list>
+      <ion-item ng-click="openAbout()">A propos</ion-item>
+      <ion-item ng-click="openContact()">Contact</ion-item>
+      <ion-item ui-sref="logout({reload: true})">Déconnexion</ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
+
+<!-- Page modal pour le contact -->
+<script id="contact.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar>
+      <h1 class="title">Contact</h1>
+    </ion-header-bar>
+    <ion-content>
+
+      <ion-list ng-show="pays === 'SN'">
+        <ion-item>
+          <strong>DG Globus, Sénégal.</strong>
+        </ion-item>
+        <ion-item>
+          550 HLM Grand Médine Dakar
+          Dakar
+        </ion-item>
+        <ion-item>
+          <a href="tel:+221338606841">(+221) 33 860 68 41</a>
+        </ion-item>
+        <ion-item>
+          <a href="tel:+221784576595">(+221) 78 457 65 95</a>
+        </ion-item>
+        <ion-item>
+          <a href="tel:+221784576599">(+221) 78 457 65 99</a>
+        </ion-item>
+        <ion-item>
+          contact@sen-pass.com
+        </ion-item>
+      </ion-list>
+
+      <ion-list ng-show="pays === 'CIV'">
+        <ion-item>
+          <strong>DG Globus, Côte d'Ivoire.</strong>
+        </ion-item>
+        <ion-item>
+          5MARCORY Zone 4, Rue Paul Langevin, <br/>Impasse Vetivier, 11 BP 2114 Abidjan 11<br>
+        </ion-item>
+        <ion-item>
+          <a href="tel:+22589906403">(+225) 89 90 64 03</a>
+        </ion-item>
+        <ion-item>
+          <a href="tel:+22507619502">(+225) 07 61 95 02</a>
+        </ion-item>
+        <ion-item>
+          <strong>Service clientel</strong><br>
+          <a href="mailto:#">senpass@sen-pass.com</a>
+        </ion-item>
+      </ion-list>
+
+      <div class="button-bar">
+        <a class="button" ng-click="closeModalContact()">Fermer</a>
+      </div>
+    </ion-content>
+  </ion-modal-view>
+</script>
+
+<!-- Page modal pour le a propos -->
+<script id="about.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar>
+      <h1 class="title">A propos</h1>
+    </ion-header-bar>
+    <ion-content style="padding:2%">
+
+      <p style="text-align: justify;"> <strong>SENPASS</strong> est une plateforme multifonctionnelle propriété de la société de droit
+        sénégalais <strong>DG GLOBUS S.A.R.L</strong> créée par des sénégalais de la diaspora (USA) pour participer à l’effort de
+        consolidation de la croissance économique. <strong>SENPASS</strong> est un outil de DG GLOBUS S.A.R.L entreprise spécialisée dans
+        le commerce mobile dans toutes ses déclinaisons au premier rang desquelles se trouvent entre autres la billetterie
+        mobile, le marketing mobile ciblé, la conversion numérique et le conseil en investissement participatif.</p>
+
+      <p style="text-align: justify;">Les raisons qui ont inspiré la conception de SenPass sont simples à savoir le goût
+        de l’innovation et l’absence de structure spécialisée crédible qui s’occupe de billetterie sur le marché ; cela
+        a entrainé des désordres, inefficiences et manquements préjudiciables à tous. Il s’agit d’un marché accueillant
+        à l’innovation. Par conséquent, la dématérialisation de la billetterie pour nombre d’organisations et structures
+        va occasionner des gains de temps et des économies en termes de réduction de coûts, gains de productivité par
+        une automatisation des taches gourmandes en temps, de compétitivité, de sécurité, de traçabilité de l’information
+        et enfin la procuration d’une image écologique et « mobiquitaire » des entreprises ou organisations concernées.</p>
+
+      <p style="text-align: justify;">Dans le souci de rationalisation, d’amélioration de la rentabilité des entreprises
+        et organisations partenaires, de rapidité tout comme de sécurité, <strong>SENPASS</strong> a jugé nécessaire
+        d’innover le secteur de la billetterie utilisant le réservoir de solutions aux problèmes qu’offrent le téléphone
+        mobile et son pendant l’internet. Maintenant, dans un souci de faciliter l'accès à de grands spectacles ou à
+        certains endroits au grand public, les téléphones mobiles peuvent jouer le rôle de porte-billet électronique dans
+        le même sens qu’ils jouent le rôle de porte- monnaie électronique en lieu et place du traditionnel billet en papier.</p>
+
+      <p style="text-align: justify;">L’objectif de la plate-forme <strong>SENPASS</strong> va consister alors en la
+        dématérialisation des billets dans un souci d’efficience et de productivité se traduisant par des économies de
+        coûts d’impression et de distribution, plus de sécurité (zéro fraude) et d’élimination des longues files d’attente
+        à l’achat. Par le truchement de la plateforme <strong>SENPASS</strong>, il n’est plus nécessaire de se déplacer
+        ou de faire la queue pour acheter un ticket quel qu’il soit. Il suffit juste de disposer d’un téléphone intelligent,
+        d’une connexion internet pour télécharger l’application mobile Androïde et IOS, d’un compte Orange Money ou d’une
+        carte bancaire visa et master card avec 3DSecure pour le paiement à distance des tickets qui vous seront livrés
+        sur le téléphone mobile.</p>
+
+      <p style="text-align: justify;">Pour les acheteurs qui ne disposent pas de téléphone intelligent ou de moyens de
+        paiement à distance, la possibilité leur est offerte d’acheter leur ticket sur place le jour de l'événement.</p>
+
+      <p style="text-align: justify;">Compte tenu des exigences de performance, les entreprises se doivent de miser sur
+        les systèmes d’information pour se mettre à niveau en travaillant mieux, plus vite et à moindre coût. C’est ce
+        système qui cherche à promouvoir conjointement la réduction des charges, une plus grande sécurité et une
+        augmentation de la compétitivité en plus d’une automatisation et d’une fluidification des procédures de gestion
+        que nous proposons aux entreprises à travers notre plate-forme <strong>SENPASS</strong>.</p>
+
+      <p style="text-align: center;">Powered by <strong>Am'In IT</strong></p>
+
+      <div class="button-bar">
+        <a class="button" ng-click="closeModalAbout()">Fermer</a>
+      </div>
+    </ion-content>
+  </ion-modal-view>
+</script>
