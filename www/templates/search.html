@@ -29,11 +29,11 @@
 
     <div class="list card" ng-repeat="billet in Billets | filter:search.value">
       <div class="item item-image my-item-image">
-        <!-- <image ng-src="http://localhost/www.senPass.com/web/uploads/Billets{{ Images[$index].image }}"/> -->
-        <img src="https://www.sen-pass.com/web/uploads/Billets/{{billet.image}}" alt="">
-        <i ng-show="billet.is_free" style="font-size: 1.5em;float: right; color: red" class="icon ion-asterisk"></i>
-      </div>
-
+        <a ui-sref="tabsController.detailsBillet({ id: billet.id })">
+          <img style="width: 100%" src="https://www.sen-pass.com/web/uploads/Billets/{{billet.image}}" alt="">
+          <i ng-show="billet.is_free" style="font-size: 1.5em;float: right; color: red" class="icon ion-asterisk"></i>
+        </a>
+      </di>
       <a class="item item-icon-left" ui-sref="tabsController.detailsBillet({ id: billet.id })">
         <i class="icon ion-location"></i>
         <p style="word-wrap: break-word">Le {{ billet.date_expiration | date:'dd' }}

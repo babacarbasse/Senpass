@@ -21,7 +21,9 @@
     <div class="list card" ng-repeat="billet in BilletsRestaurants">
       <div class="item item-image my-item-image"
            style="height: 100px; ">
-        <image style="width: 100%; height: 100px" ng-src="{{ URL_IMAGE }}/uploads/Billets/{{ billet.image }}"/>
+        <a ui-sref="tabsController.detailsBilletRestauration({ id: billet.id })">
+            <image style="width: 100%; height: 100px" ng-src="{{ URL_IMAGE }}/uploads/Billets/{{ billet.image }}"/>
+        </a>
       </div>
 
       <a class="item item-icon-left" ui-sref="tabsController.detailsBilletRestauration({ id: billet.id })">
