@@ -160,11 +160,9 @@ angular.module('app')
         case 'MTN' : 
           somme += (somme * Number($scope.billet.commission_om)/100);
           break;
-        // case 'Flooz' : 
-        //   if($scope.billet.commission_flooz !== null) {
-        //     somme += (somme * Number($scope.billet.commission_flooz)/100);
-        //   }
-        //   break;
+        case 'Flooz' : 
+          somme += (somme * Number($scope.billet.commission_wari)/100);
+          break;
         case 'Wari' : 
           somme += (somme * Number($scope.billet.commission_wari)/100);
           break;
