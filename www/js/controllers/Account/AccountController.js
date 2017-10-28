@@ -177,6 +177,9 @@ angular.module('app')
     };
 
     $scope.getAchats = function (id_user) {
+      console.log('====================================');
+      console.log('achat');
+      console.log('====================================');
       $scope.Billets = [];
       AccountService.getAchatService(id_user)
         .then(function (res) {
@@ -296,6 +299,9 @@ angular.module('app')
     };
 
     $scope.getTicketsTransferes = function () {
+      console.log('====================================');
+      console.log('transfet');
+      console.log('====================================');
       $scope.TransfertsVide = "Pas de transferts reçus.";
       $scope.BilletsTransferes = [];
       AccountService.getTicketsTransfereService()
@@ -325,6 +331,10 @@ angular.module('app')
             $scope.tailleTransfert = 1;
           }
           Store.setTransfert($scope.BilletsTransferes);
+
+          console.log('====================================');
+          console.log($scope.BilletsTransferes);
+          console.log('====================================');
         })
     };
 
@@ -602,6 +612,7 @@ angular.module('app')
     if ($rootScope.toState == 'tabsController.achats') {
       $scope.$on("$ionicView.enter", function (event, data) {
         $scope.getAchats(localStorage.getItem('idClient'));
+        $scope.getTicketsTransferes();
       });
     } else if ($rootScope.toState == 'tabsController.reservations') {
       $scope.getReservations(localStorage.getItem('idClient'));

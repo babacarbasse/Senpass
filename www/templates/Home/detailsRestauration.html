@@ -6,10 +6,27 @@
   <!--<ion-content overflow-scroll="true" class="has-header">-->
   <ion-content class="content">
 
+    <h4 style="color: #ff6600" ng-show="billet.is_free">Billet gratuit</h4>
+    <br>
+    <span style="color:#0B78ED;margin-top: 1%;padding: 5%; font-size: 1.1em">
+        {{ billet.libelle }}
+    </span>
+    <br>
     <img style="width: 100%" src="https://www.sen-pass.com/web/uploads/Billets/{{billet.image}}" alt="">
     
-    <div style="text-align: justify; padding: 2%">
-      <p ng-bind-html="billet.description"></p>
+    <div style="text-align: justify; padding: 4%; margin-top: -9%">
+      <p style="font-size: 1.1 em" ng-bind-html="billet.categorie.description"></p><br>
+      <span style="color:#0B78ED">
+        Organisé par {{ billet.gerant.fournisseur.nom_organisation }}
+      </span>
+      <br>
+      <span style="color:#0B78ED">
+        Lieu: {{ billet.lieu }}
+      </span>
+      <br>
+      <span style="color:#0B78ED">
+          {{ billet.date_expiration | date:'medium' }}
+        </span>
     </div>
 
     <div class="spinner">

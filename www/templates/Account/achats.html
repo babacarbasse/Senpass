@@ -4,13 +4,13 @@
     <i style="font-size: x-large; vertical-align: middle; color: grey">SenPass</i>
   </ion-nav-title>
   <ion-content padding="true" class="has-header content">
-
+    <h4>Achats</h4>
     <h3 style="text-align: center" ng-show="nbreAchat == 0"> {{ messageAchat }}</h3>
 
     <div class="spinner">
       <ion-spinner ng-show="loadingDone == 0"></ion-spinner>
     </div>
-
+      <!-- -->
     <div class="list card" ng-repeat="billet in Billets">
       <div class="item item-image" style="height: 100px">
         <image ng-src="{{ URL_IMAGE }}/uploads/Billets/{{ billet.image }}"/>
@@ -27,6 +27,32 @@
         <a ng-click="redirectToAchatDetail(billet.id, billet.idAchat)" class="button button-clear button-energized"><i class="ion ion-eye" style="font-size: 1em"><span style="font-size:1em"> Ouvrir</span></i></a>
       </div>
     </div>
+
+    <hr>
+    <h4>Transferts Reçus</h4>
+    <h3 style="text-align: center" ng-show="tailleTransfert == 0"> {{ TransfertsVide }}</h3>
+    <div class="list card" ng-repeat="transfert in BilletsTransferes">
+      <div class="item item-image" style="height: 100px">
+        <image ng-src="{{ URL_IMAGE }}/uploads/Billets/{{ transfert.image }}"/>
+      </div>
+
+      <a class="item item-icon-left" ng-click="redirectToTransfertDetail(transfert.id, transfert.id_transfert)">
+        <i class="icon ion-location"></i>
+        <p style="word-wrap: break-word">Le {{ transfert.date_expiration | date:'dd' }}
+          {{ transfert.date_expiration | date:'MMMM' | convertDate }} - {{ transfert.lieu }}</p>
+        <i style="color: red; font-weight: bold; float: right;">+{{transfert.quantite }}</i>
+      </a>
+      <div class="button-bar button-full">
+        <a ng-click="openModalTransfert($index)"
+            class="button button-clear button-balanced">
+          <i class="ion ion-share" style="font-size: 1em"><span style="font-size:1em"> Transférer</span></i>
+        </a>
+        <a ng-click="redirectToTransfertDetail(transfert.id, transfert.id_transfert)" class="button button-clear button-energized">
+          <i class="ion ion-eye" style="font-size: 1em"><span style="font-size:1em"> Ouvrir</span></i>
+        </a>
+      </div>
+    </div>
+
   </ion-content>
 </ion-view>
 
@@ -55,9 +81,10 @@
 
       <div class="button-bar">
         <a class="button button-balanced button-outline"
-           ng-click="transfertTicket(Billets[idBillet].id, Billets[idBillet].idAchat, transfert)">Transférer</a>
+            ng-click="transfertTicket(Billets[idBillet].id, Billets[idBillet].idAchat, transfert)">Transférer</a>
         <a class="button" ng-click="closeModalTransfert()">Annuler</a>
       </div>
     </ion-content>
   </ion-modal-view>
 </script>
+  
