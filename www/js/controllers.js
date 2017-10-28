@@ -121,6 +121,7 @@ angular.module('app')
             region: res[i].region,
             ville: res[i].ville,
             is_free: res[i].is_free,
+            gerant: res[i].gerant,
             date_expiration: res[i].date_expiration,
             description: res[i].description,
             tva: res[i].tva,
@@ -141,6 +142,7 @@ angular.module('app')
             region: res[i].region,
             ville: res[i].ville,
             is_free: res[i].is_free,
+            gerant: res[i].gerant,
             date_expiration: res[i].date_expiration,
             description: res[i].description,
             tva: res[i].tva,
@@ -216,6 +218,7 @@ angular.module('app')
                 code: res[i].code,
                 ville: res[i].ville,
                 is_free: res[i].is_free,
+                gerant: res[i].gerant,
                 date_expiration: res[i].date_expiration,
                 type_billet: res[i].typebillets,
                 description: res[i].description,
@@ -256,6 +259,7 @@ angular.module('app')
                 region: res[i].region,
                 ville: res[i].ville,
                 is_free: res[i].is_free,
+                gerant: res[i].gerant,
                 date_expiration: res[i].date_expiration,
                 type_billet: res[i].typebillets,
                 description: res[i].description,
@@ -303,18 +307,19 @@ angular.module('app')
       for (var i = 0; i < billetsInformations.length; i++) {
         if (billetsInformations[i].categorie.type === "Universitaire")
           $scope.BilletsRestaurants.push({
-            surchage_paypal: res[i].surchage_paypal,
-            commission_om: res[i].commission_om,
-            commission_paypal: res[i].commission_paypal,
-            commission_wari: res[i].commission_wari,
-            taux_the_commission: res[i].taux_the_commission,
-            code: res[i].code,
+            surchage_paypal: billetsInformations[i].surchage_paypal,
+            commission_om: billetsInformations[i].commission_om,
+            commission_paypal: billetsInformations[i].commission_paypal,
+            commission_wari: billetsInformations[i].commission_wari,
+            taux_the_commission: billetsInformations[i].taux_the_commission,
+            code: billetsInformations[i].code,
             id: billetsInformations[i].id,
             libelle: billetsInformations[i].libelle,
             lieu: billetsInformations[i].lieu,
             region: billetsInformations[i].region,
             ville: billetsInformations[i].ville,
             is_free: billetsInformations[i].is_free,
+            gerant: billetsInformations[i].gerant,
             date_expiration: billetsInformations[i].date_expiration,
             description: billetsInformations[i].description,
             image: billetsInformations[i].image.id + "." + billetsInformations[i].image.chemin
@@ -381,6 +386,7 @@ angular.module('app')
           region: billetsInformations[i].region,
           ville: billetsInformations[i].ville,
           is_free: billetsInformations[i].is_free,
+          gerant: billetsInformations[i].gerant,
           date_expiration: billetsInformations[i].date_expiration,
           description: billetsInformations[i].description,
           image: billetsInformations[i].image.id + "." + billetsInformations[i].image.chemin
@@ -439,10 +445,11 @@ angular.module('app')
                 lieu: res[i].lieu,
                 region: res[i].region,
                 ville: res[i].ville,
-                is_free: billetsInformations.is_free,
+                is_free: res.is_free,
+                gerant: res[i].gerant,
                 date_expiration: res[i].date_expiration,
                 description: res[i].description,
-                image: billetsInformations[i].image.id + "." + billetsInformations[i].image.chemin
+                image: res[i].image.id + "." + res[i].image.chemin
                 /*imageId: HomeService.getImageBillet(res[i].image.id)
                  .then(function (res) {
                  $scope.Images.push({
