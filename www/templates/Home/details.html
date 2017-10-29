@@ -63,8 +63,12 @@
 
     </div>
 
-    <button class="button button-appli button-small button-acheter" ng-click="openModalBuy()">
+    <button ng-show="billet.is_free === false" class="button button-appli button-small button-acheter" ng-click="openModalBuy()">
       <snap class="text-button-acheter">Acheter</snap>
+    </button>
+
+    <button ng-show="billet.is_free === true" class="button button-appli button-small button-acheter" ng-click="openModalBuy()">
+      <snap class="text-button-acheter">Réserver</snap>
     </button>
 
     <br/><br/><br/><br style="margin-bottom: 2%"/>
