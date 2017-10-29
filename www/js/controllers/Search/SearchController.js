@@ -67,6 +67,7 @@ angular.module('app')
           date_expiration: res[i].date_expiration,
           description: res[i].description,
           tva: res[i].tva,
+          gerant: res[i].gerant,
           type_billet: res[i].typebillets,
           taux_the_commission: res[i].taux_the_commission,
           surchage_paypal: res[i].surchage_paypal,

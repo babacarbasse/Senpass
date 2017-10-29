@@ -9,7 +9,7 @@ angular.module('app', ['ionic', 'ionic.service.core', 'http-auth-interceptor', '
                           'intlpnIonic'])
 
   .run(function ($ionicPlatform, $state, $rootScope, ScannerService, PubliciteService, config, pushNotificationService,
-                  $timeout, $ionicLoading, $ionicPopup, MessageService, Store) {
+                  $timeout, $ionicLoading, $ionicPopup, MessageService, Store, HomeService) {
     $ionicPlatform.ready(function () {
 
       var push = new Ionic.Push({
@@ -70,6 +70,61 @@ angular.module('app', ['ionic', 'ionic.service.core', 'http-auth-interceptor', '
 
       /* RECUPERATION PUBLICITES -- DEBUT */
       $rootScope.Publicites = [];
+
+      if (Store.getUserLocation() === '') {
+        HomeService.getCountryCodeFromIpAdress()
+        .then(function (res) {
+            Store.setUserLocation(res);
+            $rootScope.getPublicites();
+        });
+      } else {
+          $rootScope.getPublicites();
+      }
+
+      $rootScope.getPublicites = function () {
+        if (Store.getUserLocation() === 'SN') {
+          PubliciteService.getPubliciteServiceSn()
+          .then(function (res) {
+            $rootScope.savePub(res);
+          });
+        }
+  
+        if (Store.getUserLocation() === 'CI') {
+          PubliciteService.getPubliciteServiceCi()
+          .then(function (res) {
+            $rootScope.savePub(res);
+          });
+        }
+  
+        if (Store.getUserLocation() === 'UNDEFINED') {
+           $rootScope.nombrePublicites = 0;
+           $rootScope.messagePublicites = "Pas de publicités disponibles.";
+        }
+  
+      };
+  
+      $rootScope.savePub = function (res) {
+        for (var i = 0; i < res.length; i++) {
+          $rootScope.Publicites.push({
+            id: res[i].id,
+            titre: res[i].titre,
+            date_affichage: res[i].date_affichage,
+            date_expiration: res[i].date_expiration,
+            description: res[i].description,
+            image: res[i].image.id + "." + res[i].image.chemin
+          });
+        }
+        $rootScope.nbrePubs = res.length;
+        console.log($rootScope.Publicites);
+        if ($rootScope.Publicites.length == 0) {
+          $rootScope.nombrePublicites = 0;
+          $rootScope.messagePublicites = "Pas de publicités disponibles.";
+        } else {
+          $rootScope.nombrePublicites = 1;
+        }
+      }
+
+      /*
       PubliciteService.getPubliciteService()
         .then(function (res) {
           for (var i = 0; i < res.length; i++) {
@@ -82,15 +137,10 @@ angular.module('app', ['ionic', 'ionic.service.core', 'http-auth-interceptor', '
               image: res[i].image.id + "." + res[i].image.chemin
             });
           }
-          $rootScope.nbrePubs = res.length;
-          console.log($rootScope.Publicites);
-          if ($rootScope.Publicites.length == 0) {
-            $rootScope.nombrePublicites = 0;
-            $rootScope.messagePublicites = "Pas de publicités disponibles.";
-          } else {
-            $rootScope.nombrePublicites = 1;
-          }
+          
         });
+        */
+
       /* RECUPERATION PUBLICITES -- FIN */
 
 

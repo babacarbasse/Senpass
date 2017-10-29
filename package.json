@@ -3,10 +3,15 @@
     "version": "0.0.1",
     "description": "SenPass: Vos tickets dans le téléphone",
     "dependencies": {
+        "@ionic-native/facebook": "^4.3.2",
         "@ionic/cloud": "^0.16.0",
         "bluebird": "^3.5.1",
+        "card.io.cordova.mobilesdk": "^2.1.0",
+        "com.paypal.cordova.mobilesdk": "^3.5.0",
         "cordova-android": "^6.2.3",
+        "cordova-android-support-gradle-release": "^1.1.4",
         "cordova-plugin-device": "1.1.4",
+        "cordova-plugin-facebook4": "^1.9.1",
         "cordova-plugin-geolocation": "^2.4.3",
         "cordova-plugin-networkinterface": "^1.2.0",
         "cordova-plugin-splashscreen": "~4.0.1",
@@ -54,7 +59,14 @@
             "cordova-plugin-device": {},
             "cordova-plugin-splashscreen": {},
             "cordova-plugin-statusbar": {},
-            "ionic-plugin-keyboard": {}
+            "ionic-plugin-keyboard": {},
+            "cordova-plugin-facebook4": {
+                "APP_ID": "176234719610768",
+                "APP_NAME": "Plateforme SENPASS"
+            },
+            "cordova-android-support-gradle-release": {
+                "ANDROID_SUPPORT_VERSION": "26.+"
+            }
         },
         "platforms": [
             "android"

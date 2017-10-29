@@ -15,6 +15,7 @@ angular.module('app')
         var json = 'http://ip-api.com/json';
         return $http.get(json).then(function(result) {
           return result.data.countryCode;
+          //return 'CI';
         }, function(err) {
           console.log(err);
           return 'UNDEFINED';

@@ -37,9 +37,6 @@ angular.module('app')
       if (Store.getUserLocation() === '') {
         HomeService.getCountryCodeFromIpAdress()
         .then(function (res) {
-            console.log('====================================');
-            console.log(res);
-            console.log('====================================');
             Store.setUserLocation(res);
             $scope.performGetBillets();
         });
@@ -76,7 +73,7 @@ angular.module('app')
           });
       }
 
-      if (Store.getUserLocation() === 'CIV') {
+      if (Store.getUserLocation() === 'CI') {
         HomeService.getBilletCIVService()
           .then(function (res) {
             $scope.saveBillets(res);
@@ -246,7 +243,7 @@ angular.module('app')
         });
       }
 
-      if (Store.getUserLocation() === 'CIV') {
+      if (Store.getUserLocation() === 'CI') {
         HomeService.getBilletCIVByCategorieService($scope.category.id)
         .then(function (res) {
           if (!angular.isUndefined(res)) {
@@ -960,27 +957,53 @@ angular.module('app')
     });
   })
 
-  .controller('publicitePageCtrl', function ($scope, $rootScope, PubliciteService) {
+  .controller('publicitePageCtrl', function ($scope, Store, $rootScope, PubliciteService) {
     //$scope.eventBadge = "0";
     //$scope.Publicites = [];
-
+    /* if (Store.getUserLocation() === '') {
+      HomeService.getCountryCodeFromIpAdress()
+      .then(function (res) {
+          Store.setUserLocation(res);
+          $scope.getPublicites();
+      });
+    } else {
+        $scope.getPublicites();
+    } */
     $scope.getPublicites = function () {
-      PubliciteService.getPubliciteService()
+      if (Store.getUserLocation() === 'SN') {
+        PubliciteService.getPubliciteServiceSn()
         .then(function (res) {
-          for (var i = 0; i < res.length; i++) {
-            $scope.Publicites.push({
-              id: res[i].id,
-              titre: res[i].titre,
-              date_affichage: res[i].date_affichage,
-              date_expiration: res[i].date_expiration,
-              description: res[i].description,
-              image: res[i].image.id + "." + res[i].image.chemin
-            });
-          }
-          $rootScope.eventBadge = res.length;
-          console.log($scope.Publicites);
+          $scope.savePub(res);
         });
+      }
+
+      if (Store.getUserLocation() === 'CI') {
+        PubliciteService.getPubliciteServiceCi()
+        .then(function (res) {
+          $scope.savePub(res);
+        });
+      }
+
+      if (Store.getUserLocation() === 'UNDEFINED') {
+          $scope.nombrePublicites = 0;
+      }
+
     };
+
+    $scope.savePub = function (res) {
+      for (var i = 0; i < res.length; i++) {
+        $scope.Publicites.push({
+          id: res[i].id,
+          titre: res[i].titre,
+          date_affichage: res[i].date_affichage,
+          date_expiration: res[i].date_expiration,
+          description: res[i].description,
+          image: res[i].image.id + "." + res[i].image.chemin
+        });
+      }
+      $rootScope.eventBadge = res.length;
+      console.log($scope.Publicites);
+    }
 
     //$scope.getPublicites();
 
