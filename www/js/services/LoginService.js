@@ -47,18 +47,19 @@ angular.module('app')
         }*/
 
         //(credentials.username;
-        credentials.username = "%2b" + credentials.username.substring(1);
+        // credentials.username = "%2b" + credentials.username.substring(1);
+        var username = credentials.username.substring(1);
         //alert(credentials.username);
-        console.log(credentials.username);
+        console.log(username);
         console.log(credentials.password);
-        $http.get(config.URL + "/oauth/v2/token?username=" + credentials.username + "&password=" + credentials.password
+        $http.get(config.URL + "/oauth/v2/token?username=" + username + "&password=" + credentials.password
                 + "&grant_type=password&client_id=" + config.CLIENT_ID + "&client_secret=" + config.CLIENT_SECRET)
           .success(function (data, status, headers, configuration) {
 
             $http.defaults.headers.common.Authorization = "Bearer "+data.access_token;  // Step 1
             localStorage.setItem('authorizationToken', data.access_token);
             if ( data.access_token ) {
-              $http.get(config.URL + "/api/users/"+credentials.username+"/infos/" + data.access_token)
+              $http.get(config.URL + "/api/users/"+username+"/infos/" + data.access_token)
                 .success(function(content){
                   console.log("id user : " + content.id);
                   // Save Device Token to DB
