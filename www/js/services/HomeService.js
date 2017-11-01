@@ -376,12 +376,20 @@ angular.module('app')
         });
       },
 
-      reserverTicketService: function (informationsBillets, idBillet) {
-        return $http.post(config.URL + "/api/reservations/" + localStorage.getItem('authorizationToken') + "/tickets/" + idBillet
-          , informationsBillets)
+      reserverTicketService: function (idBillet) {
+        $ionicLoading.show({
+          template: 'Réservation en cours...',
+          animation: 'fade-in',
+          showBackdrop: true,
+          maxWidth: 200,
+          showDelay: 0
+        });
+        return $http.post(config.URL + "/api/reservations/" + localStorage.getItem('authorizationToken') + "/tickets/" + idBillet)
           .then(function (res) {
+            $ionicLoading.hide();
             return res.data;
           }, function (error) {
+            $ionicLoading.hide();
             console.log(error);
             return error.data;
           })

@@ -696,20 +696,6 @@ angular.module('app')
         })
     };
 
-    $scope.reserverTicket = function (informationsBillets, idBillet) {
-      HomeService.reserverTicketService(informationsBillets, idBillet)
-        .then(function (res) {
-          if (res.resultat) {
-            alert('Votre réservation a bien été effectué.');
-          } else if (res.echec) {
-            alert('Il y a eu erreur pendant la réservation. Veuillez reprendre ultérieurement.');
-          }
-          $scope.closeModalBuy();
-        }, function (error) {
-          console.log(error);
-        })
-    };
-
     // Template d'achat de tickets
     $ionicModal.fromTemplateUrl('buy_tickets.html', {
       scope: $scope,
@@ -778,4 +764,19 @@ angular.module('app')
     }
     //$scope.initPaymentUI();
 
+    $scope.reserverTicket = function (idBillet) {
+      HomeService.reserverTicketService(idBillet)
+        .then(function (res) {
+          if (res.echec === 0) {
+            alert('Votre réservation a bien été effectué.');
+          } else {
+            if (res.echec === 2) {
+              $rootScope.showAlert("Vous avez déjà réserver ce ticket.", "red");
+            }
+          }
+          $scope.closeModalBuy();
+        }, function (error) {
+          console.log(error);
+        })
+    };
   });

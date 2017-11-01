@@ -31,7 +31,7 @@
       <div class="item item-image my-item-image">
         <a ui-sref="tabsController.detailsBillet({ id: billet.id })">
           <img style="width: 100%" src="https://www.sen-pass.com/web/uploads/Billets/{{billet.image}}" alt="">
-          <i ng-show="billet.is_free" style="font-size: 1.5em;float: right; color: red" class="icon ion-asterisk"></i>
+          <span ng-show="billet.is_free" style="font-size: 1em;float: right; color: red">Gratuit</span>
         </a>
       </di>
       <a class="item item-icon-left" ui-sref="tabsController.detailsBillet({ id: billet.id })">

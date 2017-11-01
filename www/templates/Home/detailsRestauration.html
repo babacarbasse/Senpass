@@ -39,7 +39,7 @@
       <a class="item item-icon-left" href="#" ng-repeat="typeBillet in TypeBillet">
         {{ typeBillet.nom }}
         <p ng-show="billet.code === 'sn'" >
-          <span style="padding-left: 40%; color: rgb(255,102,0)">OM</span>
+          <span style="padding-left: 40%; color: rgb(255,102,0)">Orange Money</span>
           <span class="item-note" style="color: black !important;">
             {{ typeBillet.prix_om }} F CFA
           </span>
@@ -65,7 +65,7 @@
         <p>
           <span style="padding-left: 40%; color: rgb(18,55,133)">Paypal</span>
           <span class="item-note" style="color: black !important;">
-            {{ typeBillet.prix_paypal }} F CFA
+            {{ typeBillet.prix_paypal + billet.surchage_paypal }} F CFA
           </span>
         </p>
         <br/>
@@ -80,7 +80,7 @@
       <snap class="text-button-acheter">Acheter</snap>
     </button>
 
-    <button ng-show="billet.is_free === true" class="button button-appli button-small button-acheter" ng-click="openModalBuy()">
+    <button ng-show="billet.is_free === true" class="button button-appli button-small button-acheter" ng-click="reserverTicket(billet.id)">
       <snap class="text-button-acheter">Réserver</snap>
     </button>
 

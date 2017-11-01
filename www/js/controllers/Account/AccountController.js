@@ -491,6 +491,7 @@ angular.module('app')
             canvas.width = window.innerWidth;
             //canvas.height = window.innerHeight;
             var image = new Image();
+            
             image.src = "data:image/png;base64,"+$scope.DetailsAchat.qrCode;
             image.width = canvas.width;
             image.height = 380;
