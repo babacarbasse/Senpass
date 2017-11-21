@@ -4,7 +4,7 @@
 
 angular.module('app')
 
-  .controller('HomeController', function ($scope, $rootScope, $timeout, $stateParams, $ionicModal, $window,
+  .controller('HomeController', function ($scope, $state, $rootScope, $timeout, $stateParams, $ionicModal, $window,
                                           Store, HomeService, AccountService, config) {
 
     $scope.billet = '';
@@ -67,6 +67,7 @@ angular.module('app')
       otp: '',
       transid: ''
     };
+  
 
     $scope.getTypeBillet = function (id_billet) {
       HomeService.getTypesBilletService(id_billet)
@@ -221,12 +222,15 @@ angular.module('app')
         y++;
       }
       var somme = $scope.calculSommeTotalAchat(informationsBillets);
+      console.log('====================================');
+      console.log(somme);
+      console.log('====================================');
 
       HomeService.buyTicketMTNService(informationsBilletSubmit, somme, idBillet)
       .then(function ( res ) {
         if ( res.resultat == 1) {
-          if (res.message.success === 1) {
-            $rootScope.showAlert("VEUILLEZ CONFIRMER VOTRE ACHAT AVEC LE MESSAGE DE CONFIRMATION RECU.", "blue");
+          if (res.message.success == 1000) {
+            $rootScope.showAlert("Vous allez recevoir un SMS de confirmation de la transaction.", "blue");
           } else {
             $rootScope.showAlert("ECHEC DE LA TRANSACTION.", "red");
           }
@@ -295,7 +299,7 @@ angular.module('app')
       .then(function ( res ) {
         if ( res.resultat == 1) {
           if (res.message.success === 1) {
-            $rootScope.showAlert("VEUILLEZ CONFIRMER VOTRE ACHAT AVEC LE MESSAGE DE CONFIRMATION RECU.", "blue");
+            $rootScope.showAlert("Vous allez recevoir un SMS de confirmation de la transaction.", "blue");
           } else {
             $rootScope.showAlert("ECHEC DE LA TRANSACTION.", "red");
           }
@@ -324,19 +328,19 @@ angular.module('app')
     /* PAYPAL PAYMENT CONFIGURATION -- BEGINNING */
     $scope.initPaymentUI =  function() {
       var clientIDs = {
-        "PayPalEnvironmentProduction": "",
+        "PayPalEnvironmentProduction": "AfyxIDhYhTcJFbdrNsViq0K4NZd2Um2ofG-wGLdymVtZSJTP-PaM2yQr1rESGEiM5KVnBkN2xyQ7zVrc",
         "PayPalEnvironmentSandbox": "AbF7omRrTaWOTtRJGPtZCksOPVYRivScJnAcEhJf9sFW4D4hfRad6K0JKYaC2d31DNu5DasZSQKjsjsY"
       };
-      PayPalMobile.init(clientIDs, $scope.onPayPalMobileInit);
+      PayPalMobile.init( clientIDs, $scope.onPayPalMobileInit );
     };
-    $scope.onSuccesfulPayment =  function(payment) {
+    $scope.onSuccesfulPayment =  function( payment ) {
       console.log("payment success: " + JSON.stringify(payment, null, 4));
     };
-    $scope.onUserCanceled = function(result) {
-      console.log(result);
+    $scope.onUserCanceled = function( result ) {
+      console.log( result );
     };
-    $scope.onAuthorizationCallback =  function(authorization) {
-      console.log("authorization: " + JSON.stringify(authorization, null, 4));
+    $scope.onAuthorizationCallback =  function( authorization ) {
+      console.log("authorization: " + JSON.stringify( authorization, null, 4 ));
     };
     $scope.onPrepareRender = function(){
       console.log(" ======= onPrepareRender ==========");
@@ -361,6 +365,7 @@ angular.module('app')
       // use PayPalEnvironmentNoNetwork mode to get look and feel of the flow
       PayPalMobile.prepareToRender("PayPalEnvironmentNoNetwork", $scope.configuration(), $scope.onPrepareRender);
     };
+    // This method serve to Get a parameter from the url
     $scope.GET = function( param, url ) {
       var vars = {};
       url.replace( location.hash, '' ).replace(
@@ -376,36 +381,100 @@ angular.module('app')
     };
     /* PAYPAL PAYMENT CONFIGURATION -- ENDING */
 
-    $scope.buyTicketPaypal = function(informationsBillets, infosBancaireOM, idBillet) {
-      $scope.url = '';
-      $scope.access_token = '';
 
-      HomeService.getTokenPaypal()
-        .then( function( res ) {
-          $scope.access_token = res.access_token;
-          HomeService.paypalPayment(10, res.access_token)
-            .then(function( res2 ) {
-              console.log( res2 );
-              var paypalWindow = window.open(res2.links[1].href, "_blank", "location=yes");
-              paypalWindow.addEventListener('loadstop', function(event) {
-                $scope.url = event.url
-              });
-              paypalWindow.addEventListener('exit', function(event) {
-                alert($scope.url);
-                alert($scope.GET("PayerID", $scope.url));
-                HomeService.executePayment($scope.access_token, res2.links[2].href, $scope.GET("PayerID", $scope.url))
-                  .then(function( res3 ) {
-                    alert(JSON.stringify(res3));
+    $scope.buyTicketPaypal = function( informationsBillets, infosBancaireOM, idBillet ) {
+      var informationsBilletSubmit = {
+        numero: [],
+        typeBillet: [],
+        nbreTicket: []
+      };
+
+      var y = 0;
+      var x = 0;
+      while ( y < $scope.items.length ) {
+        var z = 0;
+        if( informationsBillets.numero[y] == null || informationsBillets.numero[y] == undefined ) {
+          $rootScope.showAlert("Veuillez saisir un numéro de téléphone.", "red");
+        }  else if (informationsBillets.typeBillet[y] == null || informationsBillets.typeBillet[y] == undefined ) {
+          $rootScope.showAlert("Veuillez choisir un type de ticket.", "red");
+        } else if ( informationsBillets.nbreTicket[y] == null || informationsBillets.nbreTicket[y] == undefined ) {
+          $rootScope.showAlert("Veuillez choisir la quantité de ticket.", "red");
+        }
+        while ( z < $scope.TypeBillet.length ) {
+          // for ( var z = 0; z < $scope.TypeBillet.length; z++ ) {
+          if ( informationsBillets.typeBillet[y][z] == true ) {
+            informationsBilletSubmit.numero[ x ] = informationsBillets.numero[y];
+            informationsBilletSubmit.typeBillet[ x ] = $scope.TypeBillet[z].id;
+            informationsBilletSubmit.nbreTicket[ x ] = informationsBillets.nbreTicket[y][z];
+            x++;
+          }
+          z++;
+        }
+        y++;
+      }
+      var somme = 0;
+      HomeService.buyTicketPaypalService(informationsBilletSubmit, Math.round(somme), idBillet)
+        .then(function ( res ) {
+          //alert( JSON.stringify(res));
+          $scope.idTransaction = res.idTransaction;
+          if ( res.resultat == 1 ) {
+            //localStorage.setItem("idTransaction", res.idTransaction);
+            $scope.url = '';
+            $scope.access_token = '';
+            somme = res.somme;
+
+            // 1. Request an acces token from paypal
+            HomeService.getTokenPaypal()
+              .then( function( res ) {
+                $scope.access_token = res.access_token;
+                // 2. The token is used to make a first payment call
+                HomeService.paypalPayment( somme, res.access_token, $scope.idTransaction )
+                  .then(function( res2 ) {
+                    console.log( JSON.stringify( res2 ) );
+                    // 3. We open an InAppBrowser to continue the payment process
+                    var paypalWindow = window.open(res2.links[1].href, "_blank", "location=yes");
+                    paypalWindow.addEventListener('loadstop', function(event) {
+                      $scope.url = event.url // We get the url
+                    });
+                    // When closing the inAppBrowser, we get the PayerID from the URL for future use.
+                    paypalWindow.addEventListener('exit', function(event) {
+                      // alert($scope.url);
+                      // alert($scope.GET("PayerID", $scope.url));
+                      // 4. We execute the payment after client approval.
+                      HomeService.executePayment($scope.access_token, res2.links[2].href, $scope.GET("PayerID", $scope.url))
+                        .then(function( res3 ) {
+                         //  alert(JSON.stringify(res3));
+                        })
+                    });
+                  }, function ( error ){
+                    // alert(error);
+                    alert('Erreur lors de la transaction.');
                   })
-              });
-            }, function ( error ){
-              alert(error);
-            })
-        });
+              }, function ( error ){
+                  // alert(error);
+                  alert('Erreur lors de la transaction.');
+               });
+
+          } else if ( res.echec == 3 ) {
+            $rootScope.showAlert("Le numéro saisi n'est pas celui d'un étudiant.", "red");
+          } else if ( res.echec == 4 ) {
+            $rootScope.showAlert("Vous ne pouvez pas acheter de tickets pour cet étudiant.", "red");
+          } else if ( res.echec == 5 ) {
+            $rootScope.showAlert("Le numéro saisi n'est pas celui d'un utilisateur SenPass.", "red");
+          } else if ( res.echec == 6 ) {
+            $rootScope.showAlert("Ce numéro n'est pas celui d'un client.", "red");
+          } else {
+            $rootScope.showAlert("Erreur avec les informations saisies. Veuillez vérifier s'il vous plait.", "red");
+          }
+        }, function (error) {
+          alert(error);
+          console.log(error);
+        })
+
       //PayPalMobile.renderSinglePaymentUI($scope.createPayment(), $scope.onSuccesfulPayment, $scope.onUserCanceled);
     };
 
-    $scope.buyTicketOM = function (informationsBillets, infosBancaireOM, idBillet) {
+    $scope.buyTicketOM = function (informationsBillets, idBillet) {
       var informationsBilletSubmit = {
         numero: [],
         typeBillet: [],
@@ -458,7 +527,7 @@ angular.module('app')
         }
       } */
 
-      HomeService.buyTicketOMService(informationsBilletSubmit, infosBancaireOM, somme, idBillet)
+      HomeService.buyTicketOMService(informationsBilletSubmit, somme, idBillet)
         .then(function ( res ) {
           if ( res.resultat == 1) {
             $rootScope.showAlert("VEUILLEZ ATTENDRE LE MESSAGE PAIEMENT AVEC SUCCES AVANT DE FERMER LA FENETRE SUIVANTE.", "blue");
@@ -481,6 +550,85 @@ angular.module('app')
           console.log(error);
         })
     };
+
+
+    $scope.buyTicketOMCI = function (informationsBillets, idBillet) {
+      var informationsBilletSubmit = {
+        numero: [],
+        typeBillet: [],
+        nbreTicket: []
+      };
+
+      var y = 0;
+      var x = 0;
+
+      //while ( y < informationsBillets.numero.length ) {
+      while ( y < $scope.items.length ) {
+        var z = 0;
+        if( informationsBillets.numero[y] == null || informationsBillets.numero[y] == undefined ) {
+          $rootScope.showAlert("Veuillez saisir un numéro de téléphone.", "red");
+        }  else if (informationsBillets.typeBillet[y] == null || informationsBillets.typeBillet[y] == undefined ) {
+          $rootScope.showAlert("Veuillez choisir un type de ticket.", "red");
+        } else if ( informationsBillets.nbreTicket[y] == null || informationsBillets.nbreTicket[y] == undefined ) {
+          $rootScope.showAlert("Veuillez choisir la quantité de ticket.", "red");
+        }
+        while ( z < $scope.TypeBillet.length ) {
+          if ( informationsBillets.typeBillet[y][z]  == true ) {
+            informationsBilletSubmit.numero[ x ] = informationsBillets.numero[y];
+            informationsBilletSubmit.typeBillet[ x ] = $scope.TypeBillet[z].id;
+            informationsBilletSubmit.nbreTicket[ x ] = informationsBillets.nbreTicket[y][z];
+            x++;
+          }
+          z++;
+        }
+        y++;
+      }
+      var somme = 0;
+      /*for ( var i = 0; i < informationsBillets.typeBillet.length; i++ ) { // On calcule le montant total à payer en
+        // multipliant le nombre de ticket achetés avec le tarif du type du ticket
+        somme += ( Number(informationsBillets.typeBillet[i].prix) * Number(informationsBillets.nbreTicket[i]) ) +
+          (Number(informationsBillets.typeBillet[i].prix) * Number(informationsBillets.nbreTicket[i] * $scope.billet.taux_the_commission)) / 100;
+      }*/
+
+      //somme += Math.round(somme * $scope.billet.tva);
+      //somme = Math.round(somme);
+     // $scope.infosBancaireOM.S2M_TOTAL = somme;
+
+      $scope.message = "S2M_COMMANDE=" + $scope.infosBancaireOM.S2M_COMMANDE + "&S2M_DATEH=" + $scope.infosBancaireOM.S2M_DATEH +
+          "&S2M_HTYPE=" + $scope.infosBancaireOM.S2M_HTYPE + "&S2M_IDENTIFIANT=" + $scope.infosBancaireOM.S2M_IDENTIFIANT +
+          "&S2M_REF_COMMANDE=" + $scope.infosBancaireOM.S2M_REF_COMMANDE + "&S2M_SITE=" + $scope.infosBancaireOM.S2M_SITE +
+          "&S2M_TOTAL=" + $scope.infosBancaireOM.S2M_TOTAL;
+
+      /*for ( var j = 0; j < informationsBilletSubmit.numero.length; j++ ) {
+        if ( informationsBilletSubmit.numero[j].substring(0, 3) != "221" ) {
+          informationsBilletSubmit.numero[j] = "221"+informationsBilletSubmit.numero[j];
+        }
+      } */
+
+      HomeService.buyTicketOMCIService(informationsBilletSubmit, somme, idBillet)
+        .then(function ( res ) {
+          if ( res.resultat == 1) {
+            $rootScope.showAlert("VEUILLEZ ATTENDRE LE MESSAGE PAIEMENT AVEC SUCCES AVANT DE FERMER LA FENETRE SUIVANTE.", "blue");
+            $timeout(function() {
+              window.open("https://www.sen-pass.com/web/paiement.php?montant=" + res.somme + "&transaction=" + res.idTransaction, "_blank", "location=yes");
+            }, 4000);
+            $scope.closeModalBuy();
+          } else if ( res.echec == 3 ) {
+            $rootScope.showAlert("Le numéro saisi n'est pas celui d'un étudiant.", "red");
+          } else if ( res.echec == 4 ) {
+            $rootScope.showAlert("Vous ne pouvez pas acheter de tickets pour cet étudiant.", "red");
+          } else if ( res.echec == 5 ) {
+            $rootScope.showAlert("Le numéro saisi n'est pas celui d'un utilisateur SenPass.", "red");
+          } else if ( res.echec == 6 ) {
+            $rootScope.showAlert("Ce numéro n'est pas celui d'un client.", "red");
+          } else {
+              $rootScope.showAlert("Erreur avec les informations saisies. Veuillez vérifier s'il vous plait.", "red");
+          }
+        }, function (error) {
+          console.log(error);
+        })
+    };
+
 
     $scope.buyTicketCB = function (informationsBillets, infosBancaire, idBillet) {
       //alert(JSON.stringify(infosBancaire));
@@ -776,6 +924,7 @@ angular.module('app')
           }
           $scope.closeModalBuy();
         }, function (error) {
+          $rootScope.showAlert("Erreur lors de la réservation.", "red");
           console.log(error);
         })
     };

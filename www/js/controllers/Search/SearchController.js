@@ -74,6 +74,7 @@ angular.module('app')
           commission_om: res[i].commission_om,
           commission_paypal: res[i].commission_paypal,
           commission_wari: res[i].commission_wari,
+          pays: res[i].pays,
           image: res[i].image.id + "." + res[i].image.chemin
         });
       }

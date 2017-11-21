@@ -33,7 +33,7 @@ angular.module('app')
       login: function (credentials) {
 
         $ionicLoading.show({
-          template: 'Chargement...',
+          template: 'Authentification en cours...',
           animation: 'fade-in',
           showBackdrop: true,
           maxWidth: 200,
@@ -109,7 +109,7 @@ angular.module('app')
                 .error(function(error) {
                   console.log('infos erreur 2');
                   console.log(error);
-                  $ionicLoading.hide()
+                  $ionicLoading.hide();
                 });
             }
           })
@@ -119,6 +119,10 @@ angular.module('app')
                  console.log(data);
             $rootScope.$broadcast('event:auth-login-failed', status);
           });
+      },
+
+      signIn: function(user) {
+        
       },
 
       logout: function () {

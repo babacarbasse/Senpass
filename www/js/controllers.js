@@ -101,8 +101,30 @@ angular.module('app')
       }
 
       if (Store.getUserLocation() === 'UNDEFINED') {
-          $scope.nombreBillets = 0;
-          $scope.messageBillets = "Pas de billets disponibles pour votre localisation actuelle.";
+        HomeService.getBilletService()
+        .then(function (res) {
+          $scope.saveBillets(res);
+          Store.setBillet($scope.Billets); // Penser à conserver les billets localement aussi plutôt qu'ici.
+          Store.setBilletRestaurant($scope.BilletsRestaurants); // Penser à conserver les billets localement aussi plutôt qu'ici.
+          //console.log("Billet"); // Penser à conserver les billets localement aussi plutôt qu'ici.
+          //console.log($scope.Billets); // Penser à conserver les billets localement aussi plutôt qu'ici.
+          Store.setImage($scope.Images);
+          if ($scope.Billets.length === 0) {
+            $scope.nombreBillets = 0;
+            $scope.messageBillets = "Pas de billets disponibles.";
+          } else {
+            $scope.nombreBillets = 1;
+          }
+
+          if ($scope.BilletsRestaurants.length === 0) {
+            $scope.nombreBilletsRestaurants = 0;
+            $scope.messageBilletsRestaurants = "Pas de billets disponibles.";
+          } else {
+            $scope.nombreBilletsRestaurants = 1;
+          }
+        }, function (error) {
+
+        });
       }
     };
 
@@ -285,8 +307,44 @@ angular.module('app')
       }
 
       if (Store.getUserLocation() === 'UNDEFINED') {
-        $scope.nombreBillets = 0;
-        $scope.messageBillets = "Pas de billets pour cette catégorie.";
+        HomeService.getBilletByCategorieService($scope.category.id)
+        .then(function (res) {
+          if (!angular.isUndefined(res)) {
+            for (var i = 0; i < res.length; i++) {
+              $scope.Billets.push({
+                id: res[i].id,
+                libelle: res[i].libelle,
+                lieu: res[i].lieu,
+                code: res[i].code,
+                region: res[i].region,
+                ville: res[i].ville,
+                is_free: res[i].is_free,
+                gerant: res[i].gerant,
+                date_expiration: res[i].date_expiration,
+                type_billet: res[i].typebillets,
+                description: res[i].description,
+                image: res[i].image.id + "." + res[i].image.chemin,
+                surchage_paypal: res[i].surchage_paypal,
+                commission_om: res[i].commission_om,
+                commission_paypal: res[i].commission_paypal,
+                commission_wari: res[i].commission_wari,
+                taux_the_commission: res[i].taux_the_commission
+                /*imageId: HomeService.getImageBillet(res[i].image.id)
+                 .then(function (res) {
+                 $scope.Images.push({
+                 image: res
+                 });
+                 })*/
+              });
+            }
+            if ($scope.Billets.length == 0) {
+              $scope.nombreBillets = 0;
+              $scope.messageBillets = "Pas de billets pour cette catégorie.";
+            } else {
+              $scope.nombreBillets = 1;
+            }
+          }
+        });
       }
     }
 
@@ -744,6 +802,87 @@ angular.module('app')
 
   })
 
+  .controller('signInCtrl', function ($http, config, $scope,$ionicLoading, $rootScope, $state, LoginService, MessageService, Store,$ionicPlatform) {
+    $scope.user = {
+      prenom : '',
+      nom : '',
+      email : '',
+      telephone: '',
+      adresse : '',
+      password: '',
+      username: '',
+      passwordCnf : ''
+    };
+    $scope.passwordCnf = '';
+
+    $scope.doSignIn = function() {
+      console.log('====================================');
+      console.log($scope.user.password);
+      console.log('====================================');
+      if ($scope.user.password != $scope.user.passwordCnf) {
+        alert('Veuillez confirmer correctement votre mot de passe');
+        return;
+      }
+      console.log('====================================');
+      console.log($scope.user);
+      console.log('====================================');
+      if ($scope.user.prenom === '' || $scope.user.nom === '' || $scope.user.email === ''
+        || $scope.user.telephone === '' || $scope.user.adresse === '' || $scope.user.password === ''
+      ) {
+        return;
+      }
+      $scope.user.username = $scope.user.telephone;
+      $ionicLoading.show({
+        template: 'Inscription en cours...',
+        animation: 'fade-in',
+        showBackdrop: true,
+        maxWidth: 200,
+        showDelay: 0
+      });
+      $http.post(config.URL_REGISTER_WITH_FACEBOOK, $scope.user, {
+        headers: {'Content-Type': 'application/json'} 
+      })
+      .then(function(res) {
+        $ionicLoading.hide();
+        if (res.data.echec == 2) {
+          alert('Cet email est déjà utilisé');
+          return;
+        }
+        if (res.data.echec == 5) {
+          alert('Ce numéro est déjà utilisé');
+          return;
+        }
+        
+        alert('Inscription effectuée avec succès');
+        credentials = {
+          username: $scope.user.username,
+          password: $scope.user.password
+        };
+        LoginService.login(credentials);
+        $state.go('login');
+        $scope.user = {
+          prenom : '',
+          nom : '',
+          email : '',
+          telephone: '',
+          adresse : '',
+          password: '',
+          username: '',
+          passwordCnf : ''
+        };
+        $scope.passwordCnf = '';
+      }, function(err) {
+        alert('Erreur lors de l\'inscription.');
+        $ionicLoading.hide();
+      });
+      LoginService.signIn($scope.user);
+    }
+
+    $scope.goLogin = function() {
+      $state.go('login');
+    }
+  })
+
   .controller('loginCtrl', function ($http, config, $scope, $rootScope, $state, LoginService, MessageService, Store,$ionicPlatform) {
 
     $scope.credentials = {
@@ -755,72 +894,13 @@ angular.module('app')
     $scope.login = function (credentials) {
       LoginService.login(credentials);
     };
+
+    $scope.goSignIn = function() {
+      $state.go('signIn');
+    }
+
     $scope.inscrire = function () {
       window.open("https://www.sen-pass.com/register/", "_blank", "location=yes");
-    };
-
-    $scope.loginWith = function(choice) {
-      if(choice === 'facebook') {
-        $ionicPlatform.ready(function () {
-          console.log('facebook login');
-          var fbLoginSuccess = function (userData) {
-            facebookConnectPlugin.api(userData.authResponse.userID+"/?fields=id,email,first_name,last_name,name,picture", ["user_birthday"],
-              function onSuccess (result) {
-                result.email = result.id + "@facebook" + ".facebook";
-                if (result.email === null) {
-                  result.email = result.id + "@facebook" + ".facebook";
-                }
-                if (result.first_name === null) {
-                  result.first_name = result.id + ".facebook";
-                }
-                if (result.last_name === null) {
-                  result.last_name = result.id + ".facebook";
-                }
-                var post = {
-                  email: result.email,
-                  username: result.id,
-                  facebook_id: result.id,
-                  facebook_token: userData.authResponse.accessToken,
-                  prenom: result.first_name,
-                  nom: result.last_name
-                };
-                $http.post(config.URL_REGISTER_WITH_FACEBOOK, post, {
-                  headers: {'Content-Type': 'application/json'} 
-                })
-                .then(function(res) {
-                  user = res.data;
-                  var credential = {
-                    username : '',
-                    password : ''
-                  };
-                  if (user.echec === 2) {
-                    credential.username = '+'+result.id+'_facebook';
-                    credential.password = result.id+'_facebook';
-                  } else {
-                    credential.username = '+'+res.username;
-                    credential.password = res.username;
-                  }
-                  LoginService.login(credential);
-                }, function(err) {
-                  console.log('====================================');
-                  console.log(err);
-                  console.log('====================================');
-                });
-              }, function onError (error) {
-                console.error("Failed: ", error);
-              }
-            );
-          }
-          facebookConnectPlugin.login(["public_profile", "email"], fbLoginSuccess,
-            function (error) {
-              console.error(error)
-            }
-          );
-        });
-      }
-      if(choice === 'google') {
-        LoginService.googleLogin();
-      }
     };
 
     $scope.$on('event:auth-loginRequired', function (e, rejection) {

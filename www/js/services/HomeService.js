@@ -14,8 +14,12 @@ angular.module('app')
       getCountryCodeFromIpAdress: function () {
         var json = 'http://ip-api.com/json';
         return $http.get(json).then(function(result) {
-          return result.data.countryCode;
-          //return 'CI';
+          if (result.data.countryCode == 'SN' || result.data.countryCode == 'CI') {
+            //return 'CI';
+            return result.data.countryCode;
+          } else {
+            return 'UNDEFINED';
+          }
         }, function(err) {
           console.log(err);
           return 'UNDEFINED';
@@ -24,7 +28,7 @@ angular.module('app')
 
       getBilletSNService: function () {
         _url = config.URL + "/api/billets/" + localStorage.getItem('authorizationToken') + "/pays/sn";
-        return $http.get(_url)
+        return $http.get(_url) 
           .then(function (res) {
             $rootScope.loadingDone = 1;
             console.log(res);
@@ -210,7 +214,7 @@ angular.module('app')
 
       buyTicketWariService: function (informationsBillets, somme, idBillet) {
         $ionicLoading.show({
-          template: 'Chargement...',
+          template: 'Achat en cours...',
           animation: 'fade-in',
           showBackdrop: true,
           maxWidth: 200,
@@ -238,7 +242,7 @@ angular.module('app')
 
       buyTicketCBService: function (informationsBillets, somme, idBillet) {
         $ionicLoading.show({
-          template: 'Chargement...',
+          template: 'Achat en cours...',
           animation: 'fade-in',
           showBackdrop: true,
           maxWidth: 200,
@@ -266,7 +270,7 @@ angular.module('app')
 
       buyTicketOMService: function ( informationsBillets, infosBancaireOM, somme, idBillet) {
         $ionicLoading.show({
-          template: 'Chargement...',
+          template: 'Achat en cours...',
           animation: 'fade-in',
           showBackdrop: true,
           maxWidth: 200,
@@ -279,6 +283,34 @@ angular.module('app')
             numero: informationsBillets.numero, typeBillet: informationsBillets.typeBillet,
             nbreTicket: informationsBillets.nbreTicket, transID: null, montant: somme,
             operateur: "orange"
+          }
+        })
+          .then(function (res) {
+            $ionicLoading.hide();
+            console.log(res);
+            return res.data;
+          }, function (error) {
+            $ionicLoading.hide();
+            console.log(error);
+            return error.data;
+          });
+      },
+
+      buyTicketOMCIService: function ( informationsBillets, somme, idBillet) {
+        $ionicLoading.show({
+          template: 'Achat en cours...',
+          animation: 'fade-in',
+          showBackdrop: true,
+          maxWidth: 200,
+          showDelay: 0
+        });
+        return $http({
+          method: "POST",
+          url: config.URL + "/api/achats/" + localStorage.getItem('authorizationToken') + "/tickets/" + idBillet,
+          data: {
+            numero: informationsBillets.numero, typeBillet: informationsBillets.typeBillet,
+            nbreTicket: informationsBillets.nbreTicket, transID: null, montant: somme,
+            operateur: "orangeci"
           }
         })
           .then(function (res) {
@@ -306,7 +338,7 @@ angular.module('app')
           data: {
             numero: informationsBillets.numero, typeBillet: informationsBillets.typeBillet,
             nbreTicket: informationsBillets.nbreTicket, transID: null, montant: somme,
-            operateur: "PayPal"
+            operateur: "paypal"
           }
         })
           .then(function (res) {
@@ -396,32 +428,46 @@ angular.module('app')
       },
 
       getTokenPaypal: function(){
+        $ionicLoading.show({
+          template: 'Transaction en cours...',
+          animation: 'fade-in',
+          showBackdrop: true,
+          maxWidth: 200,
+          showDelay: 0
+        });
         return $http({
           method: "POST",
-          url: "https://api.sandbox.paypal.com/v1/oauth2/token",
+          //url: "https://api.sandbox.paypal.com/v1/oauth2/token",
+          url: "https://api.paypal.com/v1/oauth2/token",
           async: true,
           crossDomain: true,
           headers: {
             'content-type': "application/x-www-form-urlencoded",
-            'authorization': "Basic QVRicm4xTU9lTWkzeWtGdUpXTWVKcU0yY0hxd1JpR1pXcDRVdGVSanlPRFB2Nl9zalhDQUZqZEozNGFD" +
-            "dmNYTzFGMzk4eUNnaVFGNUtLb246RUR0eWJsbllVSk9UQjg2NWhGZmwzUFB3WmtsYkx0SWFSTzZsSWQ2ZnkxVk1yYWsyblpZam5wWjY5RT" +
-            "NmcDFGWmdtSHBJeV9keU5yQU5CazU=",
+            'authorization': "Basic QWJBX0VDS01YZmVuTVcza1JyTHNWYldOVkpXVVpsdFVTcUd3aWdKa3BPdVdfMmt"+
+            "TYUp5SEw2NlFzN2F6LTZzT1lZa2pXT3ZzcVJHZlB6c086RUE3QW5qMU5wazYzcm5fU1VVRXp0aW9OdVFRcHZzcE"+
+            "RVc0cwTUY5Q0lSbHhRRlZSTFMxMmZjVG91aHFRZjJCb2x5aGxpbFB1d3RHTVFtaFE=",
             'cache-control': "no-cache",
-            'postman-token': "9d75eb31-d99c-2fff-db4c-ba6cf950a179"
+            'postman-token': "d46c01f9-470c-7c95-5436-6512182160f9"
           },
           data: 'grant_type=client_credentials'
         })
           .then(function( res ) {
+            console.log( JSON.stringify(res));
+            $ionicLoading.hide();
             return res.data;
           }, function( error ) {
+            console.log( JSON.stringify(error));
+            Alert('Erreur lors de la transaction');
+            $ionicLoading.hide();
             return error.data;
           })
       },
 
-      paypalPayment:function(somme, token) {
+      paypalPayment:function(somme, token, idTransaction) {
         return $http({
           method: "POST",
-          url: "https://api.sandbox.paypal.com/v1/payments/payment",
+          //url: "https://api.sandbox.paypal.com/v1/payments/payment",
+          url: "https://api.paypal.com/v1/payments/payment",
           headers: {
             'content-type': "application/json",
             'authorization': "Bearer "+ token
@@ -429,8 +475,10 @@ angular.module('app')
           data: {
             "intent":"sale",
             "redirect_urls":{
-              "return_url":"http://www.sen-pass.com",
-              "cancel_url":"http://www.sen-pass.com"
+              //"return_url":"http://www.sen-pass.com",
+              "return_url": "https://www.sen-pass.com/web/app_dev.php/resultat-paiement/" + idTransaction,
+              "cancel_url": "https://www.sen-pass.com/web/app_dev.php/resultat-paiement/" + idTransaction
+              //"cancel_url":"http://www.sen-pass.com"
             },
             "payer":{
               "payment_method":"paypal"
@@ -473,7 +521,7 @@ angular.module('app')
 
       updateTransacId: function(idRequest, idTransaction){
         return $http.get(config.URL + "/api/waris/" + localStorage.getItem('authorizationToken') + "/ids/" + idRequest + "/references/" + idTransaction)
-           .then(function (res) {
+            .then(function (res) {
                 console.log(res);
                 return res.data;
             }, function (error) {

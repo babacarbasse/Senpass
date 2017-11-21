@@ -198,3 +198,15 @@
 .tabColHeadBottom {
   background-image: -webkit-linear-gradient(top, #dff0d8 0%, #c8e5bc 100%);
 }
+
+.tab-item-active {
+  color: #2ea940 !important;
+}
+
+.tab-item {
+  color : #000 !important;
+}
+
+.tabs-top.tabs-striped .tab-item.tab-item-active {
+  color: #2ea940 !important;
+}

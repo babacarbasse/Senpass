@@ -1,7 +1,7 @@
 <ion-view>
   <ion-nav-title>
     <!--<img src="img/logo.png" width="12%" style="vertical-align: middle"/>-->
-    <i style="font-size: x-large; vertical-align: middle; color: grey">SenPass</i>
+    <i style="font-size: x-large; vertical-align: middle; color: #2ea940; font-weight: bold">SenPass</i>
   </ion-nav-title>
   <!--<ion-content overflow-scroll="true" class="has-header">-->
   <ion-content class="content">
@@ -45,6 +45,7 @@
             {{ typeBillet.prix_om }} F CFA
           </span>
         </p>
+
         <p ng-show="billet.code === 'ci'" >
           <span style="padding-left: 40%; color: rgb(255,102,0)">MTN</span>
           <span class="item-note" style="color: black !important;">
@@ -153,15 +154,18 @@
         <div class="input-label">
           Type de paiement
         </div>
-        <select onchange="modePaiementChange()" ng-model="infosBancaire.typecard">
-          <option ng-show="billet.code === 'sn' " value="OM">Orange Money</option>
-          <option ng-show="billet.code === 'sn' " value="Wari">Wari</option>
-          <option ng-show="billet.code === 'ci' " value="Flooz">Flooz</option>
-          <option ng-show="billet.code === 'ci' " value="MTN">MTN</option>
+        <select ng-model="infosBancaire.typecard">
+          <option value="Paypal">PayPal</option>
+          <option ng-if="billet.code == 'sn' " value="OM">Orange Money</option>
+          <option ng-if="billet.code == 'sn' " value="Wari">Wari</option>
+          <option ng-if="billet.code == 'ci' " value="Flooz">Flooz</option>
+          <option ng-if="billet.code == 'ci' " value="MTN">MTN</option>
+          
           <!-- 
+            <option ng-if="billet.code == 'ci' " value="OMCI">Orange Money</option>
+
             <option value="Visa">Visa</option>
             <option value="Mastercard">Mastercard</option>
-            <option value="Paypal">PayPal</option>
            -->
         </select>
       </label>
@@ -337,6 +341,10 @@
            class="button" ng-click="buyTicketCB(achat, infosBancaire, billet.id)">Acheter</a>
         <a style="background-color: rgb(255,102,0); color: white" ng-if="infosBancaire.typecard == 'OM'" ng-hide="billet.is_free"
            class="button" ng-click="buyTicketOM(achat, infosBancaireOM, billet.id)">Acheter</a>
+
+        <a style="background-color: rgb(255,102,0); color: white" ng-if="infosBancaire.typecard == 'OMCI'" ng-hide="billet.is_free"
+           class="button" ng-click="buyTicketOMCI(achat, billet.id)">Acheter</a>
+
         <a style="background-color: rgb(18,55,133); color: white" ng-if="infosBancaire.typecard == 'Paypal'" ng-hide="billet.is_free"
            class="button" ng-click="buyTicketPaypal(achat, infosBancaireOM, billet.id)">Acheter</a>
       
@@ -389,7 +397,7 @@
       <button style="margin-top: 1%" ng-click="closeModalDetailAchat()" class="button">
         <i class="icon ion-arrow-left-a"></i> Retour
       </button>          
-      <span class="title" style="font-size: 1.1em">Nom ticket - Détails achat</span>
+      <span class="title" style="font-size: 1.1em">Détails achat</span>
     </ion-header-bar>
     <ion-content style="margin-left: -2%; margin-right: -8%">
       <div class="row" style="padding-bottom: 0;">

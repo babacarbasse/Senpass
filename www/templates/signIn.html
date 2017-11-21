@@ -1,0 +1,51 @@
+<ion-view>
+    <div class="background"></div>
+    <ion-content padding="true" class="has-header">
+
+        <p style="text-align: center; margin-top: 1%; margin-bottom: 1%"> 
+          <img src="img/logo.png" width="20%" style="vertical-align: middle"/>
+         <!-- <i style="font-size: xx-large; vertical-align: middle; color: white">SenPass</i> -->
+        </p>
+    
+        <form class="list">
+          <ion-list>
+            <label class="item item-input" name="prenom">
+                <span class="input-label"><i class="ion-person"></i></span>
+                <input type="text" ng-model="user.prenom" placeholder="Prénom" style="margin-left: -70px"/>
+            </label>
+            <label class="item item-input" name="nom">
+                <span class="input-label"><i class="ion-person"></i></span>
+                <input type="text" ng-model="user.nom" placeholder="Nom" style="margin-left: -70px"/>
+            </label>
+            <label class="item item-input" name="mail">
+                <span class="input-label"><i class="ion-email"></i></span>
+                <input type="text" ng-model="user.email" placeholder="Adresse mail" style="margin-left: -70px"/>
+            </label>
+            <intlpn ng-model="user.telephone" placeholder="Téléphone" default-country="sn"
+                      box-header-class="bar-energized" box-header-title="Rechercher un pays"
+                      search-placeholder="Rerchercher..."></intlpn>
+            <label class="item item-input" name="adresse">
+                <span class="input-label"><i class="ion-location"></i></span>
+                <input type="text" ng-model="user.adresse" placeholder="Adresse" style="margin-left: -70px"/>
+            </label>
+            <label class="item item-input" name="password">
+              <span class="input-label"><i class="ion-locked"></i></span>
+              <input type="password" ng-model="user.password" placeholder="Mot de passe" style="margin-left: -70px"/>
+            </label>
+            <label class="item item-input" name="password">
+                <span class="input-label"><i class="ion-locked"></i></span>
+                <input type="password" ng-model="user.passwordCnf" placeholder="Confirmer mot de passe" style="margin-left: -70px"/>
+            </label>
+          </ion-list>
+          <div class="spacer" style="height: 20px;"></div>
+          <a ng-click="doSignIn()" id="login-button1" class="login-button button button-balanced button-block">
+            S'inscrire
+          </a>
+    
+        </form>
+        <p style="float: right;">
+            <a ng-click="goLogin()" style="color: white !important; font-size: 1.5em; margin-top: -5%">Annuler</a>
+        </p>
+    </ion-content>
+    </ion-view>
+    

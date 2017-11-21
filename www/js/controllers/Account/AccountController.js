@@ -177,9 +177,6 @@ angular.module('app')
     };
 
     $scope.getAchats = function (id_user) {
-      console.log('====================================');
-      console.log('achat');
-      console.log('====================================');
       $scope.Billets = [];
       AccountService.getAchatService(id_user)
         .then(function (res) {
@@ -273,6 +270,11 @@ angular.module('app')
             $scope.BilletsReserves.push({
               id: res[i].id
             });
+            
+            console.log("========ceheck=====")
+            console.log(res)
+            console.log("========ceheck=====")
+
             if (Number(res[i].quantite) != 0) {
               $scope.BilletsReservations.push({
                 idReservation: res[i].id,
@@ -282,7 +284,8 @@ angular.module('app')
                 description: res[i].billet.description,
                 date_expiration: res[i].billet.date_expiration,
                 lieu: res[i].billet.lieu,
-                quantite: Number(res[i].quantite)
+                quantite: Number(res[i].quantite),
+                gerant: res[i].billet.gerant
               });
             }
           }
@@ -483,8 +486,6 @@ angular.module('app')
 
           } else {
             $scope.DetailsAchat.qrCode = res.qrCode;
-
-
             var canvas = document.getElementById("myCanvas");
             var ctx = canvas.getContext("2d");
 
@@ -511,9 +512,25 @@ angular.module('app')
       $scope.DetailsReservation.lieu = Store.getBilletByIdReservation(idReservation).lieu;
       $scope.DetailsReservation.description = Store.getBilletByIdReservation(idReservation).description;
       $scope.DetailsReservation.date_expiration = Store.getBilletByIdReservation(idReservation).date_expiration;
+      $scope.DetailsReservation.gerant = Store.getBilletByIdReservation(idReservation).gerant;
       AccountService.getQRCodeReservationService(idReservation)
         .then(function (res) {
           $scope.DetailsReservation.qrCode = res.qrCode;
+          
+          var canvas = document.getElementById("myCanvas");
+          var ctx = canvas.getContext("2d");
+
+          canvas.width = window.innerWidth;
+          //canvas.height = window.innerHeight;
+          var image = new Image();
+          image.src = "data:image/png;base64,"+$scope.DetailsReservation.qrCode;
+          //image.src = "http://ngcordova.com/img/ngcordova-logo.png";
+          image.width = canvas.width;
+          image.height = 380;
+          image.onload = function() {
+            ctx.imageSmoothingEnabled = false;
+            ctx.drawImage(image, 0, 0, canvas.width, 380);
+          };
         });
     };
 

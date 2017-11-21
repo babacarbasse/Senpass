@@ -261,13 +261,18 @@
           }
         }
       })
-
-
       .state('login', {
         url: '/page6',
         templateUrl: 'templates/login.html',
         controller: 'loginCtrl'
       })
+
+      .state('signIn', {
+        url: '/page6SignIn',
+        templateUrl: 'templates/signIn.html',
+        controller: 'signInCtrl'
+      })
+
       .state('logout', {
         url: 'logout',
         templateUrl: 'templates/login.html',
