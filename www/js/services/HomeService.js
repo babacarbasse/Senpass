@@ -268,7 +268,7 @@ angular.module('app')
           });
       },
 
-      buyTicketOMService: function ( informationsBillets, infosBancaireOM, somme, idBillet) {
+      buyTicketOMService: function ( informationsBillets, infosBancaireOM, somme, idBillet) { 
         $ionicLoading.show({
           template: 'Achat en cours...',
           animation: 'fade-in',

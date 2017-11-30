@@ -23,7 +23,7 @@
         <i style="color: red; font-weight: bold; float: right;">+{{billet.quantite }}</i>
       </a>
       <div class="button-bar button-full">
-        <a ng-click="openModalTransfert($index)" class="button button-clear button-balanced"><i class="ion ion-share" style="font-size: 1em"><span style="font-size:1em"> Transférer</span></i></a>
+        <a ng-click="openModalTransfert($index, 'billetAchat')" class="button button-clear button-balanced"><i class="ion ion-share" style="font-size: 1em"><span style="font-size:1em"> Transférer</span></i></a>
         <a ng-click="redirectToAchatDetail(billet.id, billet.idAchat)" class="button button-clear button-energized"><i class="ion ion-eye" style="font-size: 1em"><span style="font-size:1em"> Ouvrir</span></i></a>
       </div>
     </div>
@@ -39,11 +39,11 @@
       <a class="item item-icon-left" ng-click="redirectToTransfertDetail(transfert.id, transfert.id_transfert)">
         <i class="icon ion-location"></i>
         <p style="word-wrap: break-word">Le {{ transfert.date_expiration | date:'dd' }}
-          {{ transfert.date_expiration | date:'MMMM' | convertDate }} - {{ transfert.lieu }}</p>
+          {{ transfert.date_expiration | date:'MMMM' | convertDate }} - {{ transfert.lieu }}</p> 
         <i style="color: red; font-weight: bold; float: right;">+{{transfert.quantite }}</i>
       </a>
       <div class="button-bar button-full">
-        <a ng-click="openModalTransfert($index)"
+        <a ng-click="openModalTransfert($index, 'billetTransfert')"
             class="button button-clear button-balanced">
           <i class="ion ion-share" style="font-size: 1em"><span style="font-size:1em"> Transférer</span></i>
         </a>
@@ -80,7 +80,7 @@
 
       <div class="button-bar">
         <a class="button button-balanced button-outline"
-            ng-click="transfertTicket(Billets[idBillet].id, Billets[idBillet].idAchat, transfert)">Transférer</a>
+            ng-click="transfertTicket(transfert)">Transférer</a>
         <a class="button" ng-click="closeModalTransfert()">Annuler</a>
       </div>
     </ion-content>

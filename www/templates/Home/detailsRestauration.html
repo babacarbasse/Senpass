@@ -119,7 +119,9 @@
 
           <label class="item item-input">
             <i class="icon ion-android-phone-landscape placeholder-icon"></i>
-            <input type="text" ng-model="achat.numero[outerIndex]" placeholder="Numéro téléphone" />
+            <intlpn ng-model="achat.numero[outerIndex]" placeholder="Numéro téléphone" only-country="['us', 'sn', 'ci']"
+              default-country="sn" box-header-class="bar-energized" box-header-title="Rechercher un pays"
+              search-placeholder="Rerchercher..."></intlpn>
           </label>
 
           <!--<label ng-hide="billet.is_free" class="item item-input item-select">

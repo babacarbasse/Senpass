@@ -93,6 +93,34 @@ angular.module('app')
           })
       },
 
+      transfertTransfertTicketService: function (idTicket, idTransfert, transfert) {
+        $ionicLoading.show({
+          template: 'Transfert en cours...',
+          animation: 'fade-in',
+          showBackdrop: true,
+          maxWidth: 200,
+          showDelay: 0
+        });
+        return $http({
+          method: "POST",
+          url: config.URL + "/api/transferts/" + localStorage.getItem('authorizationToken') + "/tickets",
+          data: {
+            transfert: idTransfert,
+            telephone: transfert.telephone,
+            quantite: transfert.quantite
+          }
+        })
+          .then(function (res) {
+            $ionicLoading.hide();
+            console.log(res);
+            return res.data;
+          }, function (error) {
+            $ionicLoading.hide();
+            console.log(error);
+            return error.data;
+          })
+      },
+
       getTicketsTransfereService: function () {
         $rootScope.loadingDone = 0;
         return $http.get(config.URL + "/api/transferts/" + localStorage.getItem('authorizationToken'))

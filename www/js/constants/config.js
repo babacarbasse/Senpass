@@ -6,14 +6,14 @@ angular.module('app')
   .constant("config", (function () {
     var port = 0;              // Web server port
     //var host = "https://www.sen-pass.com/dgglobus/web";     // server host address
-    var host = "https://www.sen-pass.com/web/app_dev.php";     // server host address
+    var host = "https://www.sen-pass.com";     // server host address
     var username = "globusWari";
     var pass = "globusWari@pass";
 
     var client_id = "1_enrll9xkel4c48gk8os0ck8084040g84cksw4cgk4s0coo8ow";
     var client_secret = "4iwd9yfhirs448ggo8sgws4wg00s00c4ogg0s0wwgccgkss4wo";
 
-    var fbUrlApi = "https://www.sen-pass.com/web/app_dev.php/api/registers/"+client_secret+"/users";
+    var fbUrlApi = "https://www.sen-pass.com/api/registers/"+client_secret+"/users";
     var url;
     port != 0 ?
       url = "http://" + host + ":" + port + "/web/app_dev.php" :

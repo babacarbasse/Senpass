@@ -816,19 +816,14 @@ angular.module('app')
     $scope.passwordCnf = '';
 
     $scope.doSignIn = function() {
-      console.log('====================================');
-      console.log($scope.user.password);
-      console.log('====================================');
       if ($scope.user.password != $scope.user.passwordCnf) {
-        alert('Veuillez confirmer correctement votre mot de passe');
+        $rootScope.showAlert("Veuillez confirmer correctement votre mot de passe.", "red");
         return;
       }
-      console.log('====================================');
-      console.log($scope.user);
-      console.log('====================================');
       if ($scope.user.prenom === '' || $scope.user.nom === '' || $scope.user.email === ''
         || $scope.user.telephone === '' || $scope.user.adresse === '' || $scope.user.password === ''
       ) {
+        $rootScope.showAlert("Veuillez remplir tous les champs.", "red");
         return;
       }
       $scope.user.username = $scope.user.telephone;
@@ -845,15 +840,14 @@ angular.module('app')
       .then(function(res) {
         $ionicLoading.hide();
         if (res.data.echec == 2) {
-          alert('Cet email est déjà utilisé');
+          $rootScope.showAlert("Cet email est déjà utilisé.", "red");
           return;
         }
         if (res.data.echec == 5) {
-          alert('Ce numéro est déjà utilisé');
+          $rootScope.showAlert("Cet numéro est déjà utilisé.", "red");
           return;
         }
-        
-        alert('Inscription effectuée avec succès');
+        $rootScope.showAlert("Inscription effectuée avec succès.", "green");
         credentials = {
           username: $scope.user.username,
           password: $scope.user.password

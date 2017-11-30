@@ -270,11 +270,7 @@ angular.module('app')
             $scope.BilletsReserves.push({
               id: res[i].id
             });
-            
-            console.log("========ceheck=====")
-            console.log(res)
-            console.log("========ceheck=====")
-
+          
             if (Number(res[i].quantite) != 0) {
               $scope.BilletsReservations.push({
                 idReservation: res[i].id,
@@ -302,9 +298,6 @@ angular.module('app')
     };
 
     $scope.getTicketsTransferes = function () {
-      console.log('====================================');
-      console.log('transfet');
-      console.log('====================================');
       $scope.TransfertsVide = "Pas de transferts reçus.";
       $scope.BilletsTransferes = [];
       AccountService.getTicketsTransfereService()
@@ -570,11 +563,13 @@ angular.module('app')
         });
     };
 
-    $scope.transfertTicket = function (idTicket, idAchat, transfert) {
-      /*if ( transfert.telephone.substring(0, 3) != "221" ) {
-        transfert.telephone = "221"+transfert.telephone;
-      }*/
-      AccountService.transfertTicketService(idTicket, idAchat, transfert)
+    $scope.typeAtransfert = '';
+
+    $scope.transfertTicket = function (transfert) {
+      if ($scope.typeAtransfert == "billetAchat") {
+        idTicket = $scope.Billets[$scope.idBillet].id;
+        idAchat = $scope.Billets[$scope.idBillet].idAchat;
+        AccountService.transfertTicketService(idTicket, idAchat, transfert)
         .then(function (res) {
           console.log(res);
           if ( res.resultat == 1 ) {
@@ -595,7 +590,32 @@ angular.module('app')
           $scope.transfert.telephone = '221';
         }, function (error) {
           console.log(error);
-        })
+        });
+      } else {
+        idTicket = $scope.BilletsTransferes[$scope.idBillet].id;
+        idTransfert = $scope.BilletsTransferes[$scope.idBillet].id_transfert;
+        AccountService.transfertTransfertTicketService(idTicket, idTransfert, transfert)
+        .then(function (res) {
+          if ( res.resultat == 1 ) {
+            $rootScope.showAlert("Transfert réussi", "green");
+          } else {
+            $rootScope.showAlert( res.message, "red")
+          }
+          $scope.closeModalTransfert();
+          if ($rootScope.toState == 'tabsController.achats') {
+            $scope.getTicketsTransferes();
+          } else if ($rootScope.toState == 'tabsController.reservations') {
+            $scope.getReservations(localStorage.getItem('idClient'));
+          } else if ($rootScope.toState == 'tabsController.restauration') {
+            $scope.getRestaurations(localStorage.getItem('idClient'));
+          }
+          $scope.transfert.achat = '';
+          $scope.transfert.quantite = '';
+          $scope.transfert.telephone = '221';
+        }, function (error) {
+          console.log(error);
+        });
+      }
     };
 
     $scope.transfertTicketTransfere = function (idTransfert, transfert2) {
@@ -686,9 +706,10 @@ angular.module('app')
     }).then(function (modal) {
       $scope.modal = modal;
     });
-    $scope.openModalTransfert = function (idBillet) {
+    $scope.openModalTransfert = function (idBillet, type) {
       $scope.modal.show();
       $scope.idBillet = idBillet;
+      $scope.typeAtransfert = type;
     };
     $scope.closeModalTransfert = function () {
       $scope.modal.hide();
