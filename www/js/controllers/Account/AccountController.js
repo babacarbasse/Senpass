@@ -327,10 +327,6 @@ angular.module('app')
             $scope.tailleTransfert = 1;
           }
           Store.setTransfert($scope.BilletsTransferes);
-
-          console.log('====================================');
-          console.log($scope.BilletsTransferes);
-          console.log('====================================');
         })
     };
 
@@ -417,7 +413,7 @@ angular.module('app')
           break;
         }
       }
-      if ( $scope.DetailsArchive.type == "achat" ) {
+      if ($scope.DetailsArchive.type == "achat") {
         AccountService.getQRCodeAchatService(idArchive)
           .then(function (res) {
             $scope.DetailsArchive.qrCode = res.qrCode;
@@ -444,7 +440,7 @@ angular.module('app')
           $scope.DetailsAchat.prix_unitaire = Store.getBilletByIdAchat(idAchat).prix_unitaire;
           $scope.DetailsAchat.type_billet = Store.getBilletByIdAchat(idAchat).type_billet;
           break;
-        } else if ( !angular.isUndefined(Store.getAchatRestauration()[i]) &&
+        } else if (!angular.isUndefined(Store.getAchatRestauration()[i]) &&
           Store.getAchatRestauration()[i].idAchat == $stateParams.idRestauration ) {
           $scope.DetailsRestauration.idAchat = idAchat;
           $scope.DetailsRestauration.id = id;
@@ -485,7 +481,7 @@ angular.module('app')
             canvas.width = window.innerWidth;
             //canvas.height = window.innerHeight;
             var image = new Image();
-            
+            image.crossOrigin = 'Anonymous';
             image.src = "data:image/png;base64,"+$scope.DetailsAchat.qrCode;
             image.width = canvas.width;
             image.height = 380;
