@@ -24,7 +24,7 @@
         <i style="color: red; font-weight: bold; float: right;">+{{billet.quantite }}</i>
       </a>
       <div class="button-bar button-full">
-        <a ng-click="openModalTransfert($index)" class="button button-clear button-balanced">
+        <a ng-click="openModalTransfert($index, 'restauration')" class="button button-clear button-balanced">
           <i class="ion ion-share" style="font-size: 1em"><span style="font-size:1em"> Transférer</span></i>
         </a>
         <a ng-show="seuilScan < 3" ng-click="redirectToRestaurationDetail(billet.id, billet.idAchat)"
@@ -57,7 +57,7 @@
         box-header-class="bar-energized" box-header-title="Rechercher un pays"
         search-placeholder="Rerchercher..."></intlpn>
       </ion-list>
-      
+
       <div class="button-bar">
         <a class="button button-balanced button-outline"
            ng-click="transfertTicket(BilletsRestauration[idBillet].id, BilletsRestauration[idBillet].idAchat, transfert)">Transférer</a>

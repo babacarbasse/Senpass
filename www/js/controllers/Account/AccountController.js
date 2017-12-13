@@ -270,7 +270,7 @@ angular.module('app')
             $scope.BilletsReserves.push({
               id: res[i].id
             });
-          
+
             if (Number(res[i].quantite) != 0) {
               $scope.BilletsReservations.push({
                 idReservation: res[i].id,
@@ -505,7 +505,7 @@ angular.module('app')
       AccountService.getQRCodeReservationService(idReservation)
         .then(function (res) {
           $scope.DetailsReservation.qrCode = res.qrCode;
-          
+
           var canvas = document.getElementById("myCanvas");
           var ctx = canvas.getContext("2d");
 
@@ -588,29 +588,56 @@ angular.module('app')
           console.log(error);
         });
       } else {
-        idTicket = $scope.BilletsTransferes[$scope.idBillet].id;
-        idTransfert = $scope.BilletsTransferes[$scope.idBillet].id_transfert;
-        AccountService.transfertTransfertTicketService(idTicket, idTransfert, transfert)
-        .then(function (res) {
-          if ( res.resultat == 1 ) {
-            $rootScope.showAlert("Transfert réussi", "green");
-          } else {
-            $rootScope.showAlert( res.message, "red")
-          }
-          $scope.closeModalTransfert();
-          if ($rootScope.toState == 'tabsController.achats') {
-            $scope.getTicketsTransferes();
-          } else if ($rootScope.toState == 'tabsController.reservations') {
-            $scope.getReservations(localStorage.getItem('idClient'));
-          } else if ($rootScope.toState == 'tabsController.restauration') {
-            $scope.getRestaurations(localStorage.getItem('idClient'));
-          }
-          $scope.transfert.achat = '';
-          $scope.transfert.quantite = '';
-          $scope.transfert.telephone = '221';
-        }, function (error) {
-          console.log(error);
-        });
+        if ($scope.typeAtransfert == "restauration") {
+          idTicket = $scope.BilletsRestauration[$scope.idBillet].id;
+          idAchat = $scope.BilletsRestauration[$scope.idBillet].idAchat;
+          AccountService.transfertTicketService(idTicket, idAchat, transfert)
+          .then(function (res) {
+            console.log(res);
+            if ( res.resultat == 1 ) {
+              $rootScope.showAlert("Transfert réussi", "green");
+            } else {
+              $rootScope.showAlert( res.message, "red")
+            }
+            $scope.closeModalTransfert();
+            if ($rootScope.toState == 'tabsController.achats') {
+              $scope.getAchats(localStorage.getItem('idClient'));
+            } else if ($rootScope.toState == 'tabsController.reservations') {
+              $scope.getReservations(localStorage.getItem('idClient'));
+            } else if ($rootScope.toState == 'tabsController.restauration') {
+              $scope.getRestaurations(localStorage.getItem('idClient'));
+            }
+            $scope.transfert.achat = '';
+            $scope.transfert.quantite = '';
+            $scope.transfert.telephone = '221';
+          }, function (error) {
+            console.log(error);
+          });
+        } else {
+          idTicket = $scope.BilletsTransferes[$scope.idBillet].id;
+          idTransfert = $scope.BilletsTransferes[$scope.idBillet].id_transfert;
+          AccountService.transfertTransfertTicketService(idTicket, idTransfert, transfert)
+          .then(function (res) {
+            if ( res.resultat == 1 ) {
+              $rootScope.showAlert("Transfert réussi", "green");
+            } else {
+              $rootScope.showAlert( res.message, "red")
+            }
+            $scope.closeModalTransfert();
+            if ($rootScope.toState == 'tabsController.achats') {
+              $scope.getTicketsTransferes();
+            } else if ($rootScope.toState == 'tabsController.reservations') {
+              $scope.getReservations(localStorage.getItem('idClient'));
+            } else if ($rootScope.toState == 'tabsController.restauration') {
+              $scope.getRestaurations(localStorage.getItem('idClient'));
+            }
+            $scope.transfert.achat = '';
+            $scope.transfert.quantite = '';
+            $scope.transfert.telephone = '221';
+          }, function (error) {
+            console.log(error);
+          });
+        }
       }
     };
 
@@ -712,5 +739,3 @@ angular.module('app')
     };
 
   });
-
-
